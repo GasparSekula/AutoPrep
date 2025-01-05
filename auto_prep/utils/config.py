@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import List
 
 import numpy as np
 from pylatex import NoEscape
@@ -65,6 +66,8 @@ class GlobalConfig:
         test_size: float = 0.1,
         valid_size: float = 0.1,
         random_state: int = 42,
+        raport_decimal_precision: int = 4,
+        raport_chart_color_pallete: List[str] = ["#FF204E"],
         *args,
         **kwargs,
     ):
@@ -98,6 +101,9 @@ class GlobalConfig:
             test_size (float) - % of traing set size. Defaults to 0.1.
             valid_size (float) - % of traing set size. Defaults to 0.1.
             random_state (int) - Random state for sklearn.
+            raport_decimal_precision (int) - Decimal precision for all float in raport.
+                Will use standard python rounding.
+            raport_chart_color_pallete (List[str]) - Color palette for basic eda charts.
         """
         assert (
             isinstance(raport_name, str) and raport_name != ""
@@ -108,7 +114,7 @@ class GlobalConfig:
         self.raport_abstract = raport_abstract
         os.makedirs(root_dir, exist_ok=True)
         self.root_dir = root_dir
-        self.raport_path = os.path.join(root_dir, raport_name)
+        self.raport_path = os.path.abspath(os.path.join(root_dir, raport_name))
         self.charts_dir = os.path.join(self.raport_path, "charts")
         os.makedirs(self.charts_dir, exist_ok=True)
         self.return_tex_ = return_tex_
@@ -139,6 +145,11 @@ class GlobalConfig:
 
         self.random_state = random_state
         np.random.seed(random_state)
+
+        self.raport_decimal_precision = raport_decimal_precision
+
+        assert len(raport_chart_color_pallete) != 0, "Color palette cannot be empty."
+        self.raport_chart_color_pallete = raport_chart_color_pallete
 
     def update(self, **kwargs):
         """Updates config's data with kwargs."""

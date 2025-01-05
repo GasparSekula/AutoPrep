@@ -16,6 +16,22 @@
 - **Support for numerous explainable AI models**
 - **Explainability with model-specific examples**
 
+## Report Contents
+
+The generated report includes:
+
+1. **Title page and table of contents**
+2. **Overview**
+   - Platform structure
+   - Dataset structure
+3. **Exploratory Data Analysis**
+   - Distribution plots
+   - Correlation matrix
+   - Missing value analysis
+4. **Model Performance**
+   - Accuracy metrics
+   - Model details
+
 ## Installation
 
 ### Using pip (Recommended)
@@ -58,21 +74,31 @@
     python example_usage.py
     ```
 
-## Report Contents
+## Important informations
 
-The generated report includes:
+- for changes in config to be loaded, config.update must be called before any other import from autoprep package - as example:
 
-1. **Title page and table of contents**
-2. **Overview**
-   - Platform structure
-   - Dataset structure
-3. **Exploratory Data Analysis**
-   - Distribution plots
-   - Correlation matrix
-   - Missing value analysis
-4. **Model Performance**
-   - Accuracy metrics
-   - Model details
+    ```python
+    import logging
+    from auto_prep.utils import config
+
+    config.update(log_level=logging.DEBUG)
+
+    import numpy as np
+
+    from auto_prep.prep import AutoPrep
+    from sklearn.datasets import fetch_openml
+
+    # Load your dataset
+    data = fetch_openml(name="titanic", version=1, as_frame=True, parser="auto").frame
+    data["survived"] = data["survived"].astype(np.uint8)
+
+    # Create and run pipeline
+    pipeline = AutoPrep()
+    pipeline.run(data, target_column="survived")
+    ```
+
+    For same reason AutoPrep is not exported to top-level package. It is known implementation fault.
 
 ## License
 
@@ -81,6 +107,9 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 ## Author
 
 - **Paweł Pozorski** - [GitHub](https://github.com/Pawlo77)
+- **Katarzyna Rogalska**
+- **Julia Kruk**
+- **Gaspar Sekula**
 
 ## Acknowledgments
 

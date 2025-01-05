@@ -1,11 +1,12 @@
 from typing import Tuple
 
-import matplotlib.pyplot as plt  # noqa: F401
+import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns  # noqa: F401
+import seaborn as sns
 
+from ..utils.config import config
 from ..utils.logging_config import setup_logger
-from ..utils.other import save_chart  # noqa: F401
+from ..utils.other import save_chart
 
 logger = setup_logger(__name__)
 
@@ -20,51 +21,91 @@ class CategoricalVisualizer:
     Charts should be saved via :obj:`save_chart`.
     """
 
-    palette = ["#FF204E"]
     order = ["categorical_distribution_chart"]
 
     @staticmethod
-    def categorical_distribution_chart(X: pd.DataFrame) -> Tuple[str, str]:
+    def categorical_distribution_chart(
+        X: pd.DataFrame, y: pd.Series
+    ) -> Tuple[str, str]:
         """
         Generates a plot to visualize the distribution of categorical features.
         """
-        try:
+        settings = config.chart_settings
+        sns.set_theme(style=settings["theme"])
 
-            categorical_columns = [col for col in X.columns if X[col].dtype == "object"]
-            num_columns = len(categorical_columns)
-            num_rows = (num_columns + 1) // 2
+        logger.start_operation("Categorical distribution visualization.")
 
-            logger.start_operation(
-                f"Categorical distribution visualization for {num_columns} features."
+        categorical_columns = X.select_dtypes(include=["object"]).columns.tolist()
+        if not categorical_columns:
+            logger.debug("No categorical features found in the dataset.")
+            return "", ""
+        logger.debug(
+            "Will create categorical distribution visualization chart"
+            f"for {categorical_columns} columns."
+        )
+
+        num_columns = len(categorical_columns)
+        num_rows = (num_columns + 1) // 2
+
+        _, axes = plt.subplots(
+            num_rows,
+            2,
+            figsize=(
+                settings["plot_width"],
+                settings["plot_height_per_row"] * num_rows,
+            ),
+        )
+        axes = axes.flatten()
+
+        plot_count = 0
+        for i, column in enumerate(categorical_columns):
+            if X[column].nunique() > 15:
+                logger.debug(
+                    f"Skipping column {column} with more than 15 unique values."
+                )
+                continue
+            sns.countplot(
+                data=X,
+                y=column,
+                order=X[column].value_counts().index,
+                ax=axes[plot_count],
+                palette=sns.color_palette(settings["palette"], X[column].nunique()),
+                legend=False,
+            )
+            axes[plot_count].set_title(
+                f"Distribution of {column}",
+                fontsize=settings["title_fontsize"],
+                fontweight=settings["title_fontweight"],
+            )
+            axes[plot_count].set_xlabel(column, fontsize=settings["xlabel_fontsize"])
+            axes[plot_count].set_ylabel("Count", fontsize=settings["ylabel_fontsize"])
+            axes[plot_count].tick_params(
+                axis="x", rotation=settings["tick_label_rotation"]
             )
 
-            if not categorical_columns:
-                logger.info("No categorical features found in the dataset.")
-                logger.end_operation()
-                return "", ""
-
-            fig, axes = plt.subplots(num_rows, 2, figsize=(15, 4 * num_rows))
-            axes = axes.flatten()
-
-            for i, column in enumerate(categorical_columns):
-                sns.countplot(
-                    data=X,
-                    y=column,
-                    order=X[column].value_counts().index,
-                    ax=axes[i],
-                    color=CategoricalVisualizer.palette[0],
+            for p in axes[plot_count].patches:
+                width = p.get_width()
+                axes[plot_count].text(
+                    width + 0.2,
+                    p.get_y() + p.get_height() / 2,
+                    f"{int(width)}",
+                    ha="center",
+                    va="center",
+                    fontsize=10,
                 )
-                axes[i].set_title(f"Distribution of {column}")
-                axes[i].set_xlabel(column)
-                axes[i].set_ylabel("Count")
-                axes[i].tick_params(axis="x", rotation=45)
 
-            axes[-1].axis("off")
+            plot_count += 1
 
-            plt.tight_layout()
-            path = save_chart(name="categorical_distribution.png")
-            logger.end_operation()
-            return path, "Categorical distribution."
-        except Exception as e:
-            logger.error(f"Failed to generate categorical distribution plot: {str(e)}")
-            raise
+        for j in range(plot_count, len(axes)):
+            axes[j].axis("off")
+
+        plt.suptitle(
+            "Categorical Features Distribution",
+            fontsize=settings["title_fontsize"],
+            fontweight=settings["title_fontweight"],
+            y=1.0,
+        )
+        plt.tight_layout(pad=2.0)
+
+        path = save_chart(name="categorical_distribution.png")
+        return path, "Categorical distribution."

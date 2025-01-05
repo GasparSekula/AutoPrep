@@ -1,8 +1,14 @@
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor  # noqa F401
 
-from ..utils.abstract import Categorical, NonRequiredStep, Numerical, RequiredStep
+from ..utils.abstract import (
+    Categorical,
+    FeatureImportanceSelector,
+    NonRequiredStep,
+    Numerical,
+    RequiredStep,
+)
 from ..utils.logging_config import setup_logger
 
 logger = setup_logger(__name__)
@@ -10,7 +16,7 @@ logger = setup_logger(__name__)
 
 class VarianceFilter(RequiredStep, Numerical):
     """
-    Transformer to remove numerical columns with zero variance..
+    Transformer to remove numerical columns with zero variance.
 
     Attributes:
         dropped_columns (list): List of dropped columns.
@@ -33,7 +39,7 @@ class VarianceFilter(RequiredStep, Numerical):
         Returns:
             VarianceAndUniqueFilter: The fitted transformer instance.
         """
-        logger.start_operation(f"Fitting VarianceFilter")
+        logger.start_operation("Fitting VarianceFilter")
         zero_variance = X.var() == 0
         self.dropped_columns = X.columns[zero_variance].tolist()
         logger.end_operation()
@@ -65,7 +71,7 @@ class VarianceFilter(RequiredStep, Numerical):
         Returns:
             pd.DataFrame: The transformed data without dropped columns.
         """
-        logger.start_operation(f"Fitting and transforming data with zero variance")
+        logger.start_operation("Fitting and transforming data with zero variance")
         logger.end_operation()
         return self.fit(X).transform(X)
 
@@ -143,7 +149,7 @@ class UniqueFilter(RequiredStep, Categorical):
             pd.DataFrame: The transformed data without dropped columns.
         """
         logger.start_operation(
-            f"Fitting and transforming categorical data with 100% unique values"
+            "Fitting and transforming categorical data with 100% unique values"
         )
         logger.end_operation()
         return self.fit(X).transform(X)
@@ -370,81 +376,6 @@ class CorrelationSelector(NonRequiredStep, Numerical):
             "desc": f"Selects the top {self.k}% (rounded to whole number) of features most correlated with the target variable. Number of features that were selected: {len(self.selected_columns)}",
             "params": {"k": self.k},
         }
-
-
-class FeatureImportanceSelector(NonRequiredStep):
-    """
-    Transformer to select k% (rounded to whole number) of features
-    that are most important according to Random Forest model.
-
-    Attributes:
-        k (float): The percentage of top features to keep based on their importance.
-        selected_columns (list): List of selected columns based on feature importance.
-    """
-
-    def __init__(self, k: float = 10.0):
-        """
-        Initializes the transformer with a specified model and percentage of top important features to keep.
-
-        Args:
-            k (float): The percentage of features to retain based on their importance.
-        """
-        if not (0 <= k <= 100):
-            raise ValueError("k must be between 0 and 100.")
-        self.k = k
-        self.selected_columns = []
-
-    def fit(self, X, y):
-        """
-        Identifies the top k% (rounded to whole value) of features most important according to the model.
-
-        Args:
-            X (pd.DataFrame): The input feature data.
-            y (pd.Series): The target variable.
-
-        Returns:
-            FeatureImportanceSelector: The fitted transformer instance.
-        """
-        pass
-
-    def transform(self, X, y=None):
-        """
-        Selects the top k% of features most important according to the model.
-
-        Args:
-            X (pd.DataFrame): The feature data.
-            y (pd.Series, optional): The target variable (to append to the result).
-
-        Returns:
-            pd.DataFrame: The transformed data with only the selected top k% important features.
-        """
-        pass
-
-    def fit_transform(self, X, y):
-        """
-        Fits and transforms the data by selecting the top k% most important features. Performs fit and transform in one step.
-
-        Args:
-            X (pd.DataFrame): The feature data.
-            y (pd.Series): The target variable.
-
-        Returns:
-            pd.DataFrame: The transformed data with selected features.
-        """
-        self.fit(X, y)
-        return self.transform(X)
-
-    def is_applicable(self, dt):
-        """
-        Args:
-            dt (pd.Series) - column that is considered to be preprocessed
-                by that transformer.
-
-        Returns:
-            bool - True if it is possible to use this transofmation
-                on passed data.
-        """
-        return True
 
 
 class FeatureImportanceClassificationSelector(FeatureImportanceSelector):

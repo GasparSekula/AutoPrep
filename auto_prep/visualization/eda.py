@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
+from ..utils.config import config
 from ..utils.logging_config import setup_logger
 from ..utils.other import save_chart
 
@@ -20,7 +21,6 @@ class EdaVisualizer:
     Charts should be saved via :obj:`save_chart`.
     """
 
-    palette = ["#FF204E"]
     order = [
         "target_distribution_chart",
         "missing_values_chart",
@@ -28,16 +28,25 @@ class EdaVisualizer:
 
     # for classification
     @staticmethod
-    def target_distribution_chart(df: pd.DataFrame, y) -> Tuple[str, str]:
+    def target_distribution_chart(
+        X: pd.DataFrame,  # noqa: F841
+        y: pd.Series,
+    ) -> Tuple[str, str]:
         """
         Generates a plot to visualize the distribution of the target variable.
         """
+        logger.start_operation("Target distribution visualization.")
         try:
-            logger.start_operation("Target distribution visualization.")
+            y_df = y.to_frame(name="target")
             plt.figure(figsize=(10, 6))
-            sns.countplot(data=df, x=y, color=EdaVisualizer.palette[0])
+            sns.countplot(
+                data=y_df,
+                x="target",
+                palette=config.chart_settings["palette"],
+                hue="target",
+            )
             # add percent labels
-            total = len(df)
+            total = len(y)
             for p in plt.gca().patches:
                 height = p.get_height()
                 plt.gca().text(
@@ -49,43 +58,48 @@ class EdaVisualizer:
 
             plt.title(f"Distribution of {y.name}")
             path = save_chart(name="target_distribution.png")
-            logger.end_operation()
             return path, "Target distribution."
         except Exception as e:
             logger.error(f"Failed to generate target distribution plot: {str(e)}")
+            raise e
+        finally:
+            logger.end_operation()
 
     @staticmethod
-    def missing_values_chart(df: pd.DataFrame) -> Tuple[str, str]:
+    def missing_values_chart(
+        X: pd.DataFrame,
+        y: pd.Series,  # noqa: F841
+    ) -> Tuple[str, str]:
         """
         Generates a plot to visualize the percentage of missing values for each
         feature in the given DataFrame.
         """
+        logger.start_operation("Missing values visualizations.")
 
         try:
-
             plt.figure(figsize=(10, 6))
-            missing = df.isnull().sum() / len(df) * 100
+            missing = X.isnull().sum() / len(X) * 100
             missing = missing[missing > 0].sort_values(ascending=False)
 
-            logger.start_operation(
-                f"Missing values visualization for {len(missing)} features."
+            if missing.empty:
+                logger.debug("No missing values found in the dataset.")
+                return "", ""
+            logger.debug(
+                f"Will create missing values chart for {list(missing.index)} columns."
             )
 
-            if missing.empty:
-                logger.info("No missing values found in the dataset.")
-                logger.end_operation()
-                return "", ""
-
             sns.barplot(
-                x=missing.index, y=missing.values, color=EdaVisualizer.palette[0]
+                x=missing.index,
+                y=missing.values,
+                palette=config.chart_settings["palette"],
             )
             plt.xticks(rotation=45)
             plt.title("Percentage of Missing Values by Feature")
             path = save_chart(name="missing_values.png")
 
-            logger.end_operation()
-
             return path, "Missing values."
         except Exception as e:
             logger.error(f"Failed to generate missing values plot: {str(e)}")
-            raise
+            raise e
+        finally:
+            logger.end_operation()

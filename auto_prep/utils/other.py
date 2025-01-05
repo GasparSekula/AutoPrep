@@ -8,7 +8,7 @@ from .logging_config import setup_logger
 logger = setup_logger(__name__)
 
 
-def save_chart(self, name: str, *args, **kwargs) -> str:
+def save_chart(name: str, *args, **kwargs) -> str:
     """
     Saves chart to directory specified in config.
 

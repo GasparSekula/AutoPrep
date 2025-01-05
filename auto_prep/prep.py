@@ -1,14 +1,18 @@
-import humanize
-import numpy as np
+from typing import Callable
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+from .raporting.eda import EdaRaport
+from .raporting.overview import OverviewRaport
 from .raporting.raport import raport
 from .utils.config import config
 from .utils.logging_config import setup_logger
-from .utils.system import get_system_info
 
 logger = setup_logger(__name__)
+
+
+format_column_name: Callable = lambda x: x.replace(".", "__")
 
 
 class AutoPrep:
@@ -19,10 +23,8 @@ class AutoPrep:
     """
 
     def __init__(self):
-        self.dataset_summary = {}
-        self.target_distibution = {}
-        self.missing_values = {}
-        self.features_details = {}
+        self.overview_raport: OverviewRaport = OverviewRaport()
+        self.eda_raport: EdaRaport = EdaRaport()
 
     def run(self, data: pd.DataFrame, target_column: str):
         """Run the complete pipeline on the provided dataset.
@@ -35,7 +37,28 @@ class AutoPrep:
         logger.debug(f"Input data shape: {data.shape}")
 
         # "." in names leads to os problems
+        for col in data.columns:
+            if "." in col:
+                logger.warning(
+                    f"Column '{col}' will be renamed to {format_column_name(col)}"
+                    "renamed due to '.' in it's name, which leads to os problems."
+                )
         data = data.rename(columns=lambda x: x.replace(".", "__"))
+
+        self._run(data, target_column)
+
+        self._generate_report()
+
+    def _run(self, data: pd.DataFrame, target_column: str):
+        """
+        Performs all neccessary computations.
+
+        Args:
+            data (pd.DataFrame): Input dataset to process.
+            target_column (str): Name of the target variable column.
+        """
+
+        logger.start_operation("Calculations.")
 
         try:
             """
@@ -62,118 +85,34 @@ class AutoPrep:
             """
             Overview
             """
-            logger.start_operation("Overview.")
-            self._overview(X_train, y_train)
-            logger.end_operation()
+            self.overview_raport.run(X_train, y_train)
 
             """
             Eda
             """
-            logger.start_operation("Eda.")
-            self._eda(X_train, y_train)
-            logger.end_operation()
-
-            """
-            Generate raport
-            """
-            logger.start_operation("Raport.")
-            self._generate_report()
-            logger.end_operation()
+            self.eda_raport.run(X_train, y_train)
 
         except Exception as e:
             logger.error(f"Pipeline run failed: {e}")
             raise
 
-    def _overview(self, X: pd.DataFrame, y: pd.Series):
-        """Performs overview."""
-
-        try:
-            numeric_features = X.select_dtypes(include=[np.number]).columns
-            categorical_features = X.select_dtypes(exclude=[np.number]).columns
-
-            # Basic statistics
-            self.dataset_summary = {
-                "Number of samples": len(X),
-                "Number of features": len(X.columns),
-                "Number of numerical features": len(numeric_features),
-                "Number of categorical features": len(categorical_features),
-            }
-
-            value_counts = y.value_counts()
-            normalized_counts = y.value_counts(normalize=True)
-            self.target_distibution = list(
-                zip(value_counts.index, value_counts.values, normalized_counts.values)
-            )
-
-            missing_value_counts = X.isnull().sum()
-            normalized_missing_counts = X.isnull().sum() / len(X)
-            self.missing_values = list(
-                zip(
-                    missing_value_counts.index,
-                    missing_value_counts.values,
-                    normalized_missing_counts.values,
-                )
-            )
-
-            self.features_details = [
-                (
-                    feature,
-                    "numerical" if feature in numeric_features else "categorical",
-                    X[feature].dtype,
-                    humanize.naturalsize(X[feature].memory_usage(deep=True)),
-                )
-                for feature in X.columns
-            ]
-
-            logger.debug(
-                f"Found {len(numeric_features)} numeric and "
-                f"{len(categorical_features)} categorical features"
-            )
-
-        except Exception as e:
-            logger.error(f"Failed to generate dataset summary: {str(e)}")
-            raise
-
-    def _eda(
-        self,
-        X: pd.DataFrame,  # noqa: F841
-        y: pd.Series,  # noqa: F841
-    ):
-        """Performs eda."""
-        pass  # noqa: F401
+        logger.end_operation()
 
     def _generate_report(self):
         """Generates and saves raport."""
 
+        logger.start_operation("Generate raport.")
         raport.add_header()
 
         """
-        Overview section
+        Overview
         """
-        overview_section = raport.add_section("Overview")  # noqa: F841
-        system_subsection = raport.add_subsection("System")  # noqa: F841
-        raport.add_table(
-            get_system_info(),
-            header=None,
-        )
-        dataset_subsection = raport.add_subsection("Dataset")  # noqa: F841
-        raport.add_table(
-            self.dataset_summary,
-            header=None,
-        )
-        raport.add_table(
-            self.target_distibution,
-            caption="Target class distribution",
-            header=["class", "number of observations", "Percentage"],
-        )
-        raport.add_table(
-            self.missing_values,
-            caption="Missing values distribution",
-            header=["class", "number of observations", "Percentage"],
-        )
-        raport.add_table(
-            self.features_details,
-            header=["class", "type", "dtype", "space usage"],
-        )
+        self.overview_raport.write_to_raport(raport)
+
+        """
+        Eda
+        """
+        self.eda_raport.write_to_raport(raport)
 
         raport.generate()
+        logger.end_operation()

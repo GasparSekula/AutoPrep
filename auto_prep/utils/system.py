@@ -30,8 +30,8 @@ def get_system_info():
     virtual_memory = psutil.virtual_memory()
     system_info.update(
         {
-            "Total RAM (GB)": virtual_memory.total / (1024**3),
-            "Available RAM (GB)": virtual_memory.available / (1024**3),
+            "Total RAM (GB)": round(virtual_memory.total / (1024**3), 2),
+            "Available RAM (GB)": round(virtual_memory.available / (1024**3), 2),
         }
     )
 
@@ -39,8 +39,8 @@ def get_system_info():
     disk_usage = psutil.disk_usage("/")
     system_info.update(
         {
-            "Total Disk Space (GB)": disk_usage.total / (1024**3),
-            "Free Disk Space (GB)": disk_usage.free / (1024**3),
+            "Total Disk Space (GB)": round(disk_usage.total / (1024**3), 2),
+            "Free Disk Space (GB)": round(disk_usage.free / (1024**3), 2),
         }
     )
 

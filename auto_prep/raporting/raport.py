@@ -115,6 +115,8 @@ class Report:
             header (List[dict]): Table header. Defaults to ["Category", "Value"].
                 If None, no header will be set.
         """
+        decimal_precision = config.raport_decimal_precision
+
         try:
             if isinstance(data, dict):
                 data = list(data.items())
@@ -150,7 +152,7 @@ class Report:
                             # Format row elements
                             formatted_row = [
                                 (
-                                    f"{value:.4f}"
+                                    f"{value:.{decimal_precision}f}"
                                     if isinstance(value, float)
                                     else str(value)
                                 )
@@ -204,7 +206,8 @@ class Report:
             raise
 
     def generate(self) -> None:
-        """Generate the final PDF report.
+        """
+        Generate the final PDF report.
 
         Args:
             output_path (str): Path where to save the PDF.
