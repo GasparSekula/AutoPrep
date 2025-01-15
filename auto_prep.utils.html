@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.utils package &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -55,7 +55,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#auto-prep-prep-module">auto_prep.prep module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep.prep">auto_prep.prep module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep">Module contents</a></li>
 </ul>
 </li>
@@ -104,28 +104,123 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="auto_prep.utils.abstract.NonRequiredStep">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.abstract.</span></span><span class="sig-name descname"><span class="pre">NonRequiredStep</span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#NonRequiredStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.NonRequiredStep" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code></a></p>
-<p>Non required step that will be only considered for preprocessing
-if class method is_applicable returns True.</p>
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.Classifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.abstract.</span></span><span class="sig-name descname"><span class="pre">Classifier</span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#Classifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.Classifier" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract interface to indicate classification problem.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.ModulesHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.abstract.</span></span><span class="sig-name descname"><span class="pre">ModulesHandler</span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#ModulesHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.ModulesHandler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.utils.abstract.NonRequiredStep.is_applicable">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_applicable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#NonRequiredStep.is_applicable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.NonRequiredStep.is_applicable" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_pipelines_steps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">called_from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipelines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><span class="pre">Step</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_only_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><span class="pre">Step</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#ModulesHandler.construct_pipelines_steps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps" title="Link to this definition"></a></dt>
+<dd><p>Constructs new pipelines (list of steps) by adding steps from the provided module. The
+method dynamically loads and groups classes from the module, and then
+extends existing pipelines by adding required and/or non-required steps.</p>
+<p>The method starts by loading and grouping classes from the module. It then
+explodes the existing pipelines by adding required steps. If the <cite>required_only_</cite>
+flag is <cite>False</cite>, non-required steps are also added to the pipelines.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dt</strong> (<em>pd.Series</em>) – by that transformer.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step_name</strong> (<em>str</em>) – The name of the step, used for logging purposes.</p></li>
+<li><p><strong>module_name</strong> (<em>str</em>) – The name of the module from which to load and group classes.</p></li>
+<li><p><strong>called_from</strong> (<em>str</em>) – for relative imports.</p></li>
+<li><p><strong>pipelines</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><em>Step</em></a><em>]</em><em>]</em>) – A list of existing pipelines to be extended.</p></li>
+<li><p><strong>required_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <cite>True</cite>, only required steps are added to the
+pipelines. If <cite>False</cite>, both required and non-required steps are added.
+Defaults to <cite>False</cite>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>bool - True if it is possible to use this transofmation</dt><dd><p>on passed data.</p>
+<dd class="field-even"><p>A list of new pipelines steps created by adding the corresponding
+required and non-required steps to the original pipelines.</p>
 </dd>
-</dl>
-</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[List[<a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step">Step</a>]]</p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps_helper">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_pipelines_steps_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">called_from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipelines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><span class="pre">Step</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_only_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><span class="pre">Step</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#ModulesHandler.construct_pipelines_steps_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps_helper" title="Link to this definition"></a></dt>
+<dd><p>A helper method to construct and extend pipelines steps by incorporating modules
+dynamically from a specified package.</p>
+<p>This method uses the <cite>ModulesHandler.construct_pipelines</cite> function to add
+modules to existing pipelines based on the package’s name and the current
+file context. It logs the operation’s start and end using the provided
+logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step_name</strong> (<em>str</em>) – The name of the step, used for logging purposes.</p></li>
+<li><p><strong>package_name</strong> (<em>str</em>) – The name of the package containing the modules
+to be dynamically added to the pipelines.</p></li>
+<li><p><strong>called_from</strong> (<em>str</em>) – for relative imports.</p></li>
+<li><p><strong>pipelines</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><em>Step</em></a><em>]</em><em>]</em>) – A list of existing pipelines to which
+new modules will be added.</p></li>
+<li><p><strong>required_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <cite>True</cite>, only the required modules
+(determined by the package) will be added. If <cite>False</cite>, both required
+and non-required modules will be included. Defaults to <cite>False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated list of pipelines steps after incorporating
+the modules from the specified package.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[List[<a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step">Step</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.ModulesHandler.get_subpackage">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_subpackage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">__file__</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#ModulesHandler.get_subpackage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.ModulesHandler.get_subpackage" title="Link to this definition"></a></dt>
+<dd><p>Returns the name of the package (directory) containing the given file
+as relative auto_prep subpackage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>__file__</strong> (<em>str</em>) – The absolute or relative path to the current file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The name of the directory containing the file, which is treated as the package name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError - if it cannot find the module</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.ModulesHandler.load_classes">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#ModulesHandler.load_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.ModulesHandler.load_classes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.ModulesHandler.supported_combinations">
+<span class="sig-name descname"><span class="pre">supported_combinations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('NumericalRequired',</span> <span class="pre">(&lt;class</span> <span class="pre">'auto_prep.utils.abstract.Numerical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.RequiredStep'&gt;)),</span> <span class="pre">('NumericalNonRequired',</span> <span class="pre">(&lt;class</span> <span class="pre">'auto_prep.utils.abstract.Numerical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.NonRequiredStep'&gt;)),</span> <span class="pre">('CategoricalRequired',</span> <span class="pre">(&lt;class</span> <span class="pre">'auto_prep.utils.abstract.Categorical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.RequiredStep'&gt;)),</span> <span class="pre">('CategoricalNonRequired',</span> <span class="pre">(&lt;class</span> <span class="pre">'auto_prep.utils.abstract.Categorical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.NonRequiredStep'&gt;)),</span> <span class="pre">('NumericalCategoricalRequired',</span> <span class="pre">(&lt;class</span> <span class="pre">'auto_prep.utils.abstract.NumericalCategorical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.RequiredStep'&gt;)),</span> <span class="pre">('NumericalCategoricalNonRequired',</span> <span class="pre">(&lt;class</span> <span class="pre">'auto_prep.utils.abstract.NumericalCategorical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.NonRequiredStep'&gt;))]</span></em><a class="headerlink" href="#auto_prep.utils.abstract.ModulesHandler.supported_combinations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.ModulesHandler.supported_interfaces">
+<span class="sig-name descname"><span class="pre">supported_interfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;class</span> <span class="pre">'auto_prep.utils.abstract.Numerical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.Categorical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.NumericalCategorical'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.RequiredStep'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.utils.abstract.NonRequiredStep'&gt;]</span></em><a class="headerlink" href="#auto_prep.utils.abstract.ModulesHandler.supported_interfaces" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.NonRequiredStep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.abstract.</span></span><span class="sig-name descname"><span class="pre">NonRequiredStep</span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#NonRequiredStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.NonRequiredStep" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#auto_prep.utils.abstract.Step" title="auto_prep.utils.abstract.Step"><code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code></a></p>
+<p>Non required step that will be only considered for preprocessing.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -133,6 +228,20 @@ if class method is_applicable returns True.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.abstract.</span></span><span class="sig-name descname"><span class="pre">Numerical</span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#Numerical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.Numerical" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Abstract interface to indicate numerical step</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.NumericalCategorical">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.abstract.</span></span><span class="sig-name descname"><span class="pre">NumericalCategorical</span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#NumericalCategorical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.NumericalCategorical" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract interface to indicate categorical and numerical step</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.utils.abstract.Regressor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.abstract.</span></span><span class="sig-name descname"><span class="pre">Regressor</span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#Regressor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.Regressor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract interface to indicate regression problem.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -150,23 +259,11 @@ if class method is_applicable returns True.</p>
 preprocessing steps. If step is parametrizable, it should have
 defined “param_grid” of all possible values for each parameter.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.utils.abstract.Step.is_numerical">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_numerical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#Step.is_numerical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.Step.is_numerical" title="Link to this definition"></a></dt>
-<dd><p>If this step is for numerical data or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>True if the step is for numerical data, False otherwise.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="auto_prep.utils.abstract.Step.to_tex">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/abstract.html#Step.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.abstract.Step.to_tex" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns a short description in form of dictionary.
+Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -178,6 +275,76 @@ defined “param_grid” of all possible values for each parameter.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.utils.config.</span></span><span class="sig-name descname"><span class="pre">GlobalConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/utils/config.html#GlobalConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.config.GlobalConfig" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Global config class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.utils.config.GlobalConfig.prepare_dir">
+<span class="sig-name descname"><span class="pre">prepare_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/utils/config.html#GlobalConfig.prepare_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.config.GlobalConfig.prepare_dir" title="Link to this definition"></a></dt>
+<dd><p>Clears and creates all neccessary directories.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.utils.config.GlobalConfig.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raport_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'raport'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raport_title:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'ML</span> <span class="pre">Raport'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raport_author:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'AutoPrep'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raport_abstract:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">NoEscape(</span>&#160;&#160;&#160;&#160; <span class="pre">\begin{abstract}</span>&#160;&#160;&#160;&#160; <span class="pre">This</span> <span class="pre">raport</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">generated</span> <span class="pre">with</span> <span class="pre">AutoPrep.</span>&#160;&#160;&#160;&#160; <span class="pre">\end{abstract}</span>&#160;&#160;&#160;&#160; <span class="pre">)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_dir:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'raport'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_tex_:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_colors_map:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'CRITICAL':</span> <span class="pre">'\x1b[41m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'DEBUG':</span> <span class="pre">'\x1b[36m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'ERROR':</span> <span class="pre">'\x1b[31m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'INFO':</span> <span class="pre">'\x1b[32m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'RESET':</span> <span class="pre">'\x1b[0m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'WARNING':</span> <span class="pre">'\x1b[33m'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_format:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'%(asctime)s</span> <span class="pre">%(levelname)s</span> <span class="pre">%(name)s:</span> <span class="pre">%(message)s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_date_format:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'%Y-%m-%d</span> <span class="pre">%H:%M:%S'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_level:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_log_file_size_in_mb:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tex_geomatry:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'bmargin':</span> <span class="pre">'0.5in'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'footskip':</span> <span class="pre">'0.2in'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'headheight':</span> <span class="pre">'10pt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'margin':</span> <span class="pre">'0.5in'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'tmargin':</span> <span class="pre">'0.5in'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_size:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_datasets_after_preprocessing:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perform_only_required_:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raport_decimal_precision:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chart_settings:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'heatmap_cmap':</span> <span class="pre">'coolwarm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'heatmap_fmt':</span> <span class="pre">'.2f'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'palette':</span> <span class="pre">'pastel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'plot_height_per_row':</span> <span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'plot_width':</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'theme':</span> <span class="pre">'white'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'tick_label_rotation':</span> <span class="pre">45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'title_fontsize':</span> <span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'title_fontweight':</span> <span class="pre">'bold'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'xlabel_fontsize':</span> <span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'ylabel_fontsize':</span> <span class="pre">15}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_selectors_settings:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'k':</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'threshold':</span> <span class="pre">0.8}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlier_detector_settings:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'cook_threshold':</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'isol_forest_n_estimators':</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'zscore_threshold':</span> <span class="pre">3}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imputer_settings:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'categorical_strategy':</span> <span class="pre">'most_frequent'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'n_iter':</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'numerical_strategy':</span> <span class="pre">'mean'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">umap_components:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_threshold:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_percent:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlier_detector_method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'zscore'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_unique_values_classification:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression_pipeline_scoring_model:</span> <span class="pre">~sklearn.base.BaseEstimator</span> <span class="pre">=</span> <span class="pre">RandomForestRegressor(max_depth=5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state=42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warm_start=True)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification_pipeline_scoring_model:</span> <span class="pre">~sklearn.base.BaseEstimator</span> <span class="pre">=</span> <span class="pre">RandomForestClassifier(max_depth=5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state=42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warm_start=True)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression_pipeline_scoring_func:</span> <span class="pre">callable</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">(&lt;function</span> <span class="pre">mean_squared_error&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'min')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification_pipeline_scoring_func_bin:</span> <span class="pre">callable</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">(&lt;function</span> <span class="pre">roc_auc_score&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'max')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification_pipeline_scoring_func_multi:</span> <span class="pre">callable</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">(&lt;function</span> <span class="pre">accuracy_score&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'max')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tuning_params:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{'cv':</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'n_iter':</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'n_jobs':</span> <span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'random_state':</span> <span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'verbose':</span> <span class="pre">0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_models:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/utils/config.html#GlobalConfig.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.config.GlobalConfig.set" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raport_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>raport_title</strong> (<em>str</em>)</p></li>
+<li><p><strong>raport_title</strong></p></li>
+<li><p><strong>raport_abstract</strong> (<em>str</em>) – Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_ABSTRACT</span></code>.</p></li>
+<li><p><strong>root_dir</strong> (<em>str</em>) – stored and all cache. Defaults to “raport”.</p></li>
+<li><p><strong>return_tex</strong> (<em>bool</em>) – alongsite the pdf. Defaults to True.</p></li>
+<li><p><strong>logger_colors_map</strong> (<em>dict</em>) – Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">COLORS</span></code>.</p></li>
+<li><p><strong>log_format</strong> (<em>str</em>) – Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_FORMAT</span></code>.</p></li>
+<li><p><strong>log_date_format</strong> (<em>str</em>) – Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_DATE_FORMAT</span></code>.</p></li>
+<li><p><strong>log_level</strong> (<em>str</em>) – Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">LOG_LEVEL</span></code>.</p></li>
+<li><p><strong>log_dir</strong> (<em>str</em>) – If None provided, will default to “logs” in directory from which program was called.
+-1 means no logging to file.</p></li>
+<li><p><strong>max_log_file_size_in_mb</strong> (<em>int</em>) – each logger. Defaults to 5.</p></li>
+<li><p><strong>tex_geomatry</strong> (<em>dict</em>) – Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_TEX_GEOMETRY</span></code>.</p></li>
+<li><p><strong>train_size</strong> (<em>float</em>)</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>)</p></li>
+<li><p><strong>valid_size</strong> (<em>float</em>)</p></li>
+<li><p><strong>random_state</strong> (<em>int</em>)</p></li>
+<li><p><strong>max_datasets_after_preprocessing</strong> (<em>int</em>) – after preprocessing steps. On them further models will be trained. Strongly
+affects performance.</p></li>
+<li><p><strong>perform_only_required</strong> (<em>bool</em>) – Affects entire process.</p></li>
+<li><p><strong>raport_decimal_precision</strong> (<em>int</em>) – Will use standard python rounding.</p></li>
+<li><p><strong>chart_settings</strong> (<em>dict</em>) – Settings for customizing chart appearance.
+Defaults to None, which initializes default settings.</p></li>
+<li><p><strong>correlation_selectors_settings</strong> (<em>dict</em>) – Settings for correlation selectors.</p></li>
+<li><p><strong>outlier_detector_settings</strong> (<em>dict</em>) – Settings for outlier detectors</p></li>
+<li><p><strong>imputer_settings</strong> (<em>dict</em>) – Settings for imputers</p></li>
+<li><p><strong>umap_components</strong> (<em>int</em>) – Number of components for UMAP.</p></li>
+<li><p><strong>max_unique_values_classification</strong> (<em>int</em>) – it will calculate number of unique values (in task “auto”). If this number will be lower than
+that value, it’ll perform classification.</p></li>
+<li><p><strong>regression_pipeline_scoring_model</strong> (<em>BaseEstimator</em>) – in classification regression task.</p></li>
+<li><p><strong>classification_pipeline_scoring_model</strong> (<em>BaseEstimator</em>) – in classification regression task.</p></li>
+<li><p><strong>regression_pipeline_scoring_func</strong> (<em>callable</em>)</p></li>
+<li><p><strong>classification_pipeline_scoring_func</strong> (<em>callable</em>)</p></li>
+<li><p><strong>raport_chart_color_pallete</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>max_unique_values_classification</strong> – it will calculate number of unique values (in task “auto”). If this number will be lower than
+that value, it’ll perform classification.</p></li>
+<li><p><strong>regression_pipeline_scoring_model</strong> – in classification regression task.</p></li>
+<li><p><strong>classification_pipeline_scoring_model</strong> – in classification regression task.</p></li>
+<li><p><strong>Union</strong><strong>[</strong><strong>callable</strong> (<em>classification_pipeline_scoring_func_multi</em>)</p></li>
+<li><p><strong>pair</strong> (<em>str</em><em>] </em><em>-</em>)</p></li>
+<li><p><strong>Union</strong><strong>[</strong><strong>callable</strong></p></li>
+<li><p><strong>pair</strong></p></li>
+<li><p><strong>Union</strong><strong>[</strong><strong>callable</strong></p></li>
+<li><p><strong>pair</strong></p></li>
+<li><p><strong>raport_chart_color_pallete</strong></p></li>
+<li><p><strong>correlation_threshold</strong> (<em>float</em>)</p></li>
+<li><p><strong>correlation_percent</strong> (<em>float</em>)</p></li>
+<li><p><strong>n_bins</strong> (<em>int</em>)</p></li>
+<li><p><strong>outlier_detector_method</strong> (<em>str</em>)</p></li>
+<li><p><strong>max_workers</strong> (<em>int</em>)</p></li>
+<li><p><strong>tuning_params</strong> (<em>dict</em>)</p></li>
+<li><p><strong>max_models</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="auto_prep.utils.config.GlobalConfig.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/utils/config.html#GlobalConfig.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.config.GlobalConfig.update" title="Link to this definition"></a></dt>
@@ -264,8 +431,22 @@ It is used to track the duration of a specific operation or task.</p>
 <section id="module-auto_prep.utils.other">
 <span id="auto-prep-utils-other-module"></span><h2>auto_prep.utils.other module<a class="headerlink" href="#module-auto_prep.utils.other" title="Link to this heading"></a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="auto_prep.utils.other.get_scoring">
+<span class="sig-prename descclassname"><span class="pre">auto_prep.utils.other.</span></span><span class="sig-name descname"><span class="pre">get_scoring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/other.html#get_scoring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.other.get_scoring" title="Link to this definition"></a></dt>
+<dd><p>Retrieve proper scoring function from config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_train</strong> (<em>pd.Series</em>) – Training target dataset.</p></li>
+<li><p><strong>task</strong> (<em>str</em>) – regiression / classification</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="auto_prep.utils.other.save_chart">
-<span class="sig-prename descclassname"><span class="pre">auto_prep.utils.other.</span></span><span class="sig-name descname"><span class="pre">save_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/other.html#save_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.other.save_chart" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">auto_prep.utils.other.</span></span><span class="sig-name descname"><span class="pre">save_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/other.html#save_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.other.save_chart" title="Link to this definition"></a></dt>
 <dd><p>Saves chart to directory specified in config.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -278,9 +459,48 @@ It is used to track the duration of a specific operation or task.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="auto_prep.utils.other.save_json">
+<span class="sig-prename descclassname"><span class="pre">auto_prep.utils.other.</span></span><span class="sig-name descname"><span class="pre">save_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/other.html#save_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.other.save_json" title="Link to this definition"></a></dt>
+<dd><p>Saves json-like object to directory specified in config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returs:</dt><dd><p>path (str) - Path where chart has been saved.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="auto_prep.utils.other.save_model">
+<span class="sig-prename descclassname"><span class="pre">auto_prep.utils.other.</span></span><span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseEstimator</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/auto_prep/utils/other.html#save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.other.save_model" title="Link to this definition"></a></dt>
+<dd><p>Saves model to directory specified in config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>model</strong> (<em>BaseEstimator</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returs:</dt><dd><p>path (str) - Path where model has been saved.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="auto-prep-utils-system-module">
-<h2>auto_prep.utils.system module<a class="headerlink" href="#auto-prep-utils-system-module" title="Link to this heading"></a></h2>
+<section id="module-auto_prep.utils.system">
+<span id="auto-prep-utils-system-module"></span><h2>auto_prep.utils.system module<a class="headerlink" href="#module-auto_prep.utils.system" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="auto_prep.utils.system.get_system_info">
+<span class="sig-prename descclassname"><span class="pre">auto_prep.utils.system.</span></span><span class="sig-name descname"><span class="pre">get_system_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/utils/system.html#get_system_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.utils.system.get_system_info" title="Link to this definition"></a></dt>
+<dd><p>Collect system stats</p>
+</dd></dl>
+
 </section>
 <section id="module-auto_prep.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-auto_prep.utils" title="Link to this heading"></a></h2>

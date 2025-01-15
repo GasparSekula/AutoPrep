@@ -1,6 +1,113 @@
 auto\_prep.modeling package
 ===========================
 
+Submodules
+----------
+
+auto\_prep.modeling.handler module
+----------------------------------
+
+.. automodule:: auto_prep.modeling.handler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_BayesianRidgeRegressor module
+--------------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_BayesianRidgeRegressor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_DecisionTreeClassifier module
+--------------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_DecisionTreeClassifier
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_GaussianNaiveClassifier module
+---------------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_GaussianNaiveClassifier
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_GradientBoostingRegressor module
+-----------------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_GradientBoostingRegressor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_KNeighboursClassifier module
+-------------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_KNeighboursClassifier
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_KNeighboursRegressor module
+------------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_KNeighboursRegressor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_LinearRegression module
+--------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_LinearRegression
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_LinearSVR module
+-------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_LinearSVR
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_LogisticRegression module
+----------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_LogisticRegression
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_RandomForestRegressor module
+-------------------------------------------------------
+
+.. automodule:: auto_prep.modeling.model_RandomForestRegressor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_SVC module
+-------------------------------------
+
+.. automodule:: auto_prep.modeling.model_SVC
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.modeling.model\_XGBoost module
+-----------------------------------------
+
+.. automodule:: auto_prep.modeling.model_XGBoost
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

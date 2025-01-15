@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.utils.abstract &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,15 +69,23 @@
            <div itemprop="articleBody">
              
   <h1>Source code for auto_prep.utils.abstract</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Numerical">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.Numerical">[docs]</a>
-<span class="k">class</span> <span class="nc">Numerical</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Numerical</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract interface to indicate numerical step&quot;&quot;&quot;</span>
 
     <span class="k">pass</span></div>
@@ -86,8 +94,35 @@
 
 <div class="viewcode-block" id="Categorical">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.Categorical">[docs]</a>
-<span class="k">class</span> <span class="nc">Categorical</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Categorical</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract interface to indicate categorical step&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="NumericalCategorical">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.NumericalCategorical">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NumericalCategorical</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract interface to indicate categorical and numerical step&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="Classifier">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.Classifier">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Classifier</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract interface to indicate classification problem.&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="Regressor">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.Regressor">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Regressor</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract interface to indicate regression problem.&quot;&quot;&quot;</span>
 
     <span class="k">pass</span></div>
 
@@ -95,7 +130,7 @@
 
 <div class="viewcode-block" id="Step">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.Step">[docs]</a>
-<span class="k">class</span> <span class="nc">Step</span><span class="p">(</span><span class="n">ABC</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Step</span><span class="p">(</span><span class="n">ABC</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract class to be overwritten for implementing custom</span>
 <span class="sd">    preprocessing steps. If step is parametrizable, it should have</span>
@@ -105,19 +140,10 @@
 <div class="viewcode-block" id="Step.to_tex">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.Step.to_tex">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">to_tex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="k">pass</span></div>
-
-
-<div class="viewcode-block" id="Step.is_numerical">
-<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.Step.is_numerical">[docs]</a>
-    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">is_numerical</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If this step is for numerical data or not.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if the step is for numerical data, False otherwise.</span>
+<span class="sd">        Returns a short description in form of dictionary.</span>
+<span class="sd">        Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 </div>
@@ -126,7 +152,7 @@
 
 <div class="viewcode-block" id="RequiredStep">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep">[docs]</a>
-<span class="k">class</span> <span class="nc">RequiredStep</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RequiredStep</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Required step that will be always considered in preprocessing.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -137,27 +163,318 @@
 
 <div class="viewcode-block" id="NonRequiredStep">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep">[docs]</a>
-<span class="k">class</span> <span class="nc">NonRequiredStep</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NonRequiredStep</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Non required step that will be only considered for preprocessing</span>
-<span class="sd">    if class method is_applicable returns True.</span>
+<span class="sd">    Non required step that will be only considered for preprocessing.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="NonRequiredStep.is_applicable">
-<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep.is_applicable">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">is_applicable</span><span class="p">(</span><span class="n">dt</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="ModulesHandler">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModulesHandler</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="n">supported_interfaces</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Numerical</span><span class="p">,</span>
+        <span class="n">Categorical</span><span class="p">,</span>
+        <span class="n">NumericalCategorical</span><span class="p">,</span>
+        <span class="n">RequiredStep</span><span class="p">,</span>
+        <span class="n">NonRequiredStep</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">supported_combinations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">object</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;NumericalRequired&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">Numerical</span><span class="p">,</span> <span class="n">RequiredStep</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;NumericalNonRequired&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">Numerical</span><span class="p">,</span> <span class="n">NonRequiredStep</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;CategoricalRequired&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">RequiredStep</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;CategoricalNonRequired&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">NonRequiredStep</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;NumericalCategoricalRequired&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">NumericalCategorical</span><span class="p">,</span> <span class="n">RequiredStep</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;NumericalCategoricalNonRequired&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">NumericalCategorical</span><span class="p">,</span> <span class="n">NonRequiredStep</span><span class="p">)),</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs checks.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError - if any member of :obj:`ModulesHandler.supported_combinations`</span>
+<span class="sd">                is not in :obj:`ModulesHandler.supported_interfaces`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">members</span> <span class="ow">in</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">supported_combinations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span>
+                    <span class="n">member</span> <span class="ow">in</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">supported_interfaces</span>
+                <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Unsupported member in group </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">member</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="ModulesHandler.get_subpackage">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.get_subpackage">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_subpackage</span><span class="p">(</span><span class="vm">__file__</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the name of the package (directory) containing the given file</span>
+<span class="sd">        as relative auto_prep subpackage.</span>
+
 <span class="sd">        Args:</span>
-<span class="sd">            dt (pd.Series) - column that is considered to be preprocessed</span>
-<span class="sd">                by that transformer.</span>
+<span class="sd">            __file__ (str): The absolute or relative path to the current file.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The name of the directory containing the file, which is treated as the package name.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError - if it cannot find the module</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+        <span class="n">abs_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">root_project_dir</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">abs_dir</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to import module from </span><span class="si">{</span><span class="n">abs_dir</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown relative module&quot;</span><span class="p">)</span>
+
+        <span class="n">rel_dir</span> <span class="o">=</span> <span class="n">abs_dir</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">root_project_dir</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+
+        <span class="c1"># Convert the path to a module-style dot-separated format</span>
+        <span class="k">return</span> <span class="n">rel_dir</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModulesHandler.construct_pipelines_steps_helper">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps_helper">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">construct_pipelines_steps_helper</span><span class="p">(</span>
+        <span class="n">step_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">package_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">called_from</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">pipelines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]],</span>
+        <span class="n">required_only_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A helper method to construct and extend pipelines steps by incorporating modules</span>
+<span class="sd">        dynamically from a specified package.</span>
+
+<span class="sd">        This method uses the `ModulesHandler.construct_pipelines` function to add</span>
+<span class="sd">        modules to existing pipelines based on the package&#39;s name and the current</span>
+<span class="sd">        file context. It logs the operation&#39;s start and end using the provided</span>
+<span class="sd">        logger.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            step_name (str): The name of the step, used for logging purposes.</span>
+<span class="sd">            package_name (str): The name of the package containing the modules</span>
+<span class="sd">                to be dynamically added to the pipelines.</span>
+<span class="sd">            called_from (str) - python file from which this method is called. Required</span>
+<span class="sd">                for relative imports.</span>
+<span class="sd">            pipelines (List[List[Step]]): A list of existing pipelines to which</span>
+<span class="sd">                new modules will be added.</span>
+<span class="sd">            required_only_ (bool, optional): If `True`, only the required modules</span>
+<span class="sd">                (determined by the package) will be added. If `False`, both required</span>
+<span class="sd">                and non-required modules will be included. Defaults to `False`.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            bool - True if it is possible to use this transofmation</span>
-<span class="sd">                on passed data.</span>
+<span class="sd">            List[List[Step]]: The updated list of pipelines steps after incorporating</span>
+<span class="sd">            the modules from the specified package.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="n">step_name</span><span class="p">)</span>
+        <span class="n">pipelines</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">construct_pipelines_steps</span><span class="p">(</span>
+            <span class="n">step_name</span><span class="p">,</span>
+            <span class="n">package_name</span><span class="p">,</span>
+            <span class="n">called_from</span><span class="p">,</span>
+            <span class="n">pipelines</span><span class="o">=</span><span class="n">pipelines</span><span class="p">,</span>
+            <span class="n">required_only_</span><span class="o">=</span><span class="n">required_only_</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pipelines</span></div>
+
+
+<div class="viewcode-block" id="ModulesHandler.construct_pipelines_steps">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">construct_pipelines_steps</span><span class="p">(</span>
+        <span class="n">step_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">called_from</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">pipelines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">required_only_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructs new pipelines (list of steps) by adding steps from the provided module. The</span>
+<span class="sd">        method dynamically loads and groups classes from the module, and then</span>
+<span class="sd">        extends existing pipelines by adding required and/or non-required steps.</span>
+
+<span class="sd">        The method starts by loading and grouping classes from the module. It then</span>
+<span class="sd">        explodes the existing pipelines by adding required steps. If the `required_only_`</span>
+<span class="sd">        flag is `False`, non-required steps are also added to the pipelines.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            step_name (str): The name of the step, used for logging purposes.</span>
+<span class="sd">            module_name (str): The name of the module from which to load and group classes.</span>
+<span class="sd">            called_from (str) - python file from which this method is called. Required</span>
+<span class="sd">                for relative imports.</span>
+<span class="sd">            pipelines (List[List[Step]]): A list of existing pipelines to be extended.</span>
+<span class="sd">            required_only_ (bool, optional): If `True`, only required steps are added to the</span>
+<span class="sd">                pipelines. If `False`, both required and non-required steps are added.</span>
+<span class="sd">                Defaults to `False`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[List[Step]]: A list of new pipelines steps created by adding the corresponding</span>
+<span class="sd">            required and non-required steps to the original pipelines.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Constructing new pipelines.&quot;</span><span class="p">)</span>
+
+        <span class="n">package</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">get_subpackage</span><span class="p">(</span><span class="n">called_from</span><span class="p">)</span>
+        <span class="n">new_steps</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">_load_and_group_classes</span><span class="p">(</span>
+            <span class="n">module_name</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">package</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New steps: </span><span class="si">{</span><span class="n">new_steps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">new_pipelines</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pipelines</span><span class="p">)</span><span class="si">}</span><span class="s2"> pipelines&quot;</span><span class="p">)</span>
+
+        <span class="n">new_pipelines</span><span class="p">,</span> <span class="n">num_required</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">_explode_pipelines_steps</span><span class="p">(</span>
+            <span class="n">steps</span><span class="o">=</span><span class="n">ModulesHandler</span><span class="o">.</span><span class="n">_get_required_steps</span><span class="p">(),</span>
+            <span class="n">new_steps</span><span class="o">=</span><span class="n">new_steps</span><span class="p">,</span>
+            <span class="n">pipelines</span><span class="o">=</span><span class="n">pipelines</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After required steps - </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_pipelines</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">num_non_required</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">required_only_</span><span class="p">:</span>
+            <span class="n">non_required</span><span class="p">,</span> <span class="n">num_non_required</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">_explode_pipelines_steps</span><span class="p">(</span>
+                <span class="n">steps</span><span class="o">=</span><span class="n">ModulesHandler</span><span class="o">.</span><span class="n">_get_non_required_steps</span><span class="p">(),</span>
+                <span class="n">new_steps</span><span class="o">=</span><span class="n">new_steps</span><span class="p">,</span>
+                <span class="n">pipelines</span><span class="o">=</span><span class="n">new_pipelines</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># keep those from required only and those extended with non-required steps</span>
+            <span class="k">if</span> <span class="n">num_non_required</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># there were some non-required steps</span>
+                <span class="n">new_pipelines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">non_required</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After non-required steps - </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_pipelines</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Extracted </span><span class="si">{</span><span class="n">num_required</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">num_non_required</span><span class="si">}</span><span class="s2"> steps for </span><span class="si">{</span><span class="n">step_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">num_required</span><span class="si">}</span><span class="s2"> required, </span><span class="si">{</span><span class="n">num_non_required</span><span class="si">}</span><span class="s2"> non required)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">new_pipelines</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_explode_pipelines_steps</span><span class="p">(</span>
+        <span class="n">steps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">new_steps</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">object</span><span class="p">]],</span>
+        <span class="n">pipelines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Explodes the given pipelines by adding new steps to them based on the</span>
+<span class="sd">        provided `steps` and `new_steps`. This method creates new pipelines where</span>
+<span class="sd">        each pipeline is extended by the corresponding steps from `new_steps`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            steps (List[str]): List of step names to match against `new_steps` keys.</span>
+<span class="sd">            new_steps (Dict[str, List[object]]): A dictionary where each key is a</span>
+<span class="sd">                step name and its value is a list of classes (steps) to be added</span>
+<span class="sd">                to the corresponding pipeline.</span>
+<span class="sd">            pipelines (List[List[PipelineStep]: A list of existing pipelines to be extended.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[List[Step]: A list of new pipelines created by adding the new steps</span>
+<span class="sd">                to the existing pipelines. If pipelines are empty, it will just return</span>
+<span class="sd">                new found steps.</span>
+<span class="sd">            int: number of unique objects extracted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_pipelines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pipelines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">new_steps</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">new_steps</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span>
+                        <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">new_pipelines</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">cls</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">new_pipelines</span><span class="p">,</span> <span class="n">num</span>
+
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">new_steps</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">new_steps</span><span class="p">[</span><span class="n">step</span><span class="p">]:</span>
+                    <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">for</span> <span class="n">pipeline</span> <span class="ow">in</span> <span class="n">pipelines</span><span class="p">:</span>
+                        <span class="n">new_pipelines</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="o">*</span><span class="n">pipeline</span><span class="p">,</span> <span class="bp">cls</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_pipelines</span><span class="p">,</span> <span class="n">num</span>
+        <span class="k">return</span> <span class="n">pipelines</span><span class="p">,</span> <span class="n">num</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_required_steps</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns list of names of required steps combinations&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">supported_combinations</span>
+            <span class="k">if</span> <span class="s2">&quot;NonRequired&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_non_required_steps</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns list of names of required steps combinations&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">supported_combinations</span> <span class="k">if</span> <span class="s2">&quot;NonRequired&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_and_group_classes</span><span class="p">(</span>
+        <span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">package</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">object</span><span class="p">]],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import all objects from module_name that extends any of interfaces from</span>
+<span class="sd">        :obj:`ModulesHandler.supported_interfaces` and groups them into steps</span>
+<span class="sd">        defined in :obj:`ModulesHandler.supported_combinations`</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_name (str) - module to import.</span>
+<span class="sd">            package (str) - python package from which this method is called. Required</span>
+<span class="sd">                for relative imports.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[List[object]] - objects groupped into pre-defined groups.</span>
+<span class="sd">            int - number of unique objects extracted.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError - if any of imported classes fits into more than one group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">load_classes</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">package</span><span class="p">)</span>
+
+        <span class="n">combinations</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">groupped</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">members</span> <span class="ow">in</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">supported_combinations</span><span class="p">:</span>
+                <span class="n">in_group_</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">member</span><span class="p">):</span>
+                        <span class="n">in_group_</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="k">if</span> <span class="n">in_group_</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">groupped</span><span class="p">:</span>
+                        <span class="n">groupped</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">:</span>
+                            <span class="n">combinations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">combinations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="si">}</span><span class="s2"> fits more than one group&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieved follwing combinations - </span><span class="si">{</span><span class="n">combinations</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">combinations</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">groupped</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ModulesHandler.load_classes">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.load_classes">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_classes</span><span class="p">(</span><span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">package</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">object</span><span class="p">]:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Importing classes from </span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">package</span><span class="p">)</span>
+
+        <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">cls</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found following classes: </span><span class="si">{</span><span class="n">classes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">classes</span></div>
 </div>
 
 </pre></div>

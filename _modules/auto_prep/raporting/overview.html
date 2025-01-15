@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>auto_prep.raporting.overview &mdash; AutoPrep  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AutoPrep
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">auto_prep</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AutoPrep</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">auto_prep.raporting.overview</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for auto_prep.raporting.overview</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">humanize</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.system</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_system_info</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.raport</span><span class="w"> </span><span class="kn">import</span> <span class="n">Raport</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="OverviewRaport">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.overview.OverviewRaport">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OverviewRaport</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_summary</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_distibution</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">missing_values</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features_details</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_info</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descr_num</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="OverviewRaport.run">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.overview.OverviewRaport.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs dataset overview.&quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Overview.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">task</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system_info</span> <span class="o">=</span> <span class="n">get_system_info</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to gather system informations: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">numeric_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+            <span class="n">categorical_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+
+            <span class="c1"># Basic statistics</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_summary</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;Number of samples&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span>
+                <span class="s2">&quot;Number of features&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+                <span class="s2">&quot;Number of numerical features&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">numeric_features</span><span class="p">),</span>
+                <span class="s2">&quot;Number of categorical features&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">categorical_features</span><span class="p">),</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="n">value_counts</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+                <span class="n">normalized_counts</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_distibution</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">value_counts</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                        <span class="n">value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                        <span class="n">normalized_counts</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">missing_value_counts</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">normalized_missing_counts</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">missing_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">missing_value_counts</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                    <span class="n">missing_value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                    <span class="n">normalized_missing_counts</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features_details</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span>
+                    <span class="n">feature</span><span class="p">,</span>
+                    <span class="s2">&quot;numerical&quot;</span> <span class="k">if</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">numeric_features</span> <span class="k">else</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                    <span class="n">X</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="n">humanize</span><span class="o">.</span><span class="n">naturalsize</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">memory_usage</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span>
+            <span class="p">]</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">numeric_features</span><span class="p">)</span><span class="si">}</span><span class="s2"> numeric and &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">categorical_features</span><span class="p">)</span><span class="si">}</span><span class="s2"> categorical features&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">numeric_features</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">descr_num</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">numeric_features</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">categorical_features</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">X</span><span class="p">[</span><span class="n">categorical_features</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+                <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to gather overview statistics: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="OverviewRaport.write_to_raport">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.overview.OverviewRaport.write_to_raport">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_to_raport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raport</span><span class="p">:</span> <span class="n">Raport</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes overview section to a raport&quot;&quot;&quot;</span>
+
+        <span class="n">overview_section</span> <span class="o">=</span> <span class="n">raport</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;Overview&quot;</span><span class="p">)</span>  <span class="c1"># noqa: F841</span>
+
+        <span class="n">system_subsection</span> <span class="o">=</span> <span class="n">raport</span><span class="o">.</span><span class="n">add_subsection</span><span class="p">(</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>  <span class="c1"># noqa: F841</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system_info</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;System overview.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">dataset_subsection</span> <span class="o">=</span> <span class="n">raport</span><span class="o">.</span><span class="n">add_subsection</span><span class="p">(</span><span class="s2">&quot;Dataset&quot;</span><span class="p">)</span>  <span class="c1"># noqa: F841</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_distibution</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span>
+                    <span class="s2">&quot;Task detected for the dataset: multiclass classfication.  </span><span class="se">\\</span><span class="s2">newline&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span>
+                    <span class="s2">&quot;Task detected for the dataset: binary classfication. </span><span class="se">\\</span><span class="s2">newline&quot;</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">&quot;Task detected for the dataset: regression. </span><span class="se">\\</span><span class="s2">newline&quot;</span><span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:dataset_summary&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dataset_desc</span> <span class="o">=</span> <span class="s2">&quot;presents an overview of the dataset including the number of samples, features, and their types.&quot;</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">dataset_desc</span><span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_summary</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Dataset Summary.&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:dataset_summary&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_distibution</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">target_desc</span> <span class="o">=</span> <span class="s2">&quot;Distribution of the target classes in terms of the number of observations and their percentages is presented in &quot;</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">target_desc</span><span class="p">)</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:target_distribution&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_distibution</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Target class distribution.&quot;</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;number of observations&quot;</span><span class="p">,</span> <span class="s2">&quot;fraction&quot;</span><span class="p">],</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:target_distribution&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:missing_values&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">missing_values_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;presents the distribution of missing values in the dataset.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">missing_values_desc</span><span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">missing_values</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Missing values distribution.&quot;</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">,</span> <span class="s2">&quot;number of observations&quot;</span><span class="p">,</span> <span class="s2">&quot;fraction&quot;</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:missing_values&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:features_dtypes&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">features_desc</span> <span class="o">=</span> <span class="s2">&quot;presents the description of features in the dataset.&quot;</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">features_desc</span><span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features_details</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">,</span> <span class="s2">&quot;space usage&quot;</span><span class="p">],</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Features dtypes description.&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:features_dtypes&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="s2">&quot;\%&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">descr_num</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>  <span class="c1"># noqa W605</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">descr_num</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:numerical_features&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">&quot;and &quot;</span><span class="p">)</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:categorical_features&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">features_desc</span> <span class="o">=</span> <span class="s2">&quot;present the description of numerical and categorical features in the dataset.&quot;</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">features_desc</span><span class="p">)</span>
+            <span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;feature&quot;</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">descr_num</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="n">header</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Numerical features description.&quot;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:numerical_features&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="n">header</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Categorical features description.&quot;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:categorical_features&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">descr_num</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:numerical_features&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">features_desc</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;presents the description of numerical features in the dataset.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">features_desc</span><span class="p">)</span>
+
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">descr_num</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="n">header</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Numerical features description.&quot;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:numerical_features&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:categorical_features&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">features_desc</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;presents the description of categorical features in the dataset.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">features_desc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;feature&quot;</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="n">header</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">descr_cat</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Categorical features description.&quot;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:categorical_features&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">features_desc</span> <span class="o">=</span> <span class="s2">&quot;No numerical or categorical features descriptions are available in the dataset.&quot;</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">features_desc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">raport</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Paweł Pozorski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

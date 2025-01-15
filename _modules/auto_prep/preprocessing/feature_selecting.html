@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>auto_prep.preprocessing.feature_selecting &mdash; AutoPrep  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AutoPrep
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">auto_prep</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AutoPrep</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">auto_prep.preprocessing.feature_selecting</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for auto_prep.preprocessing.feature_selecting</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.abstract</span><span class="w"> </span><span class="kn">import</span> <span class="n">Categorical</span><span class="p">,</span> <span class="n">NonRequiredStep</span><span class="p">,</span> <span class="n">Numerical</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.abstract</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeatureImportanceSelector</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CorrelationSelector">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CorrelationSelector</span><span class="p">(</span><span class="n">NonRequiredStep</span><span class="p">,</span> <span class="n">Numerical</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transformer to select correlation_percent% (rounded to whole number) of features that are most correlated with the target variable.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">         selected_columns (list): List of selected columns based on correlation with the target.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the transformer with a specified percentage of top correlated features to keep.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            correlation_percent (float): The percentage of features to retain based on their correlation with the target.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">correlation_percent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="CorrelationSelector.fit">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CorrelationSelector&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies the top correlation_percent% (rounded to whole value) of features most correlated with the target variable.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The input feature data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            CorrelationSelector: The fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Fitting CorrelationSelector with top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% correlated features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">corr_with_target</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+            <span class="n">sorted_corr</span> <span class="o">=</span> <span class="n">corr_with_target</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">num_top_features</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sorted_corr</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span> <span class="o">=</span> <span class="n">sorted_corr</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">num_top_features</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in CorrelationSelector fit: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="CorrelationSelector.transform">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects the top correlation_percent% of features most correlated with the target variable.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The feature data.</span>
+<span class="sd">            y (pd.Series, optional): The target variable (to append to the result).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: The transformed data with only the selected top k% correlated features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Transforming data by selecting </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> most correlated features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">X_selected</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Successfully transformed CorrelationSelector&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in CorrelationSelector transform: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">X_selected</span></div>
+
+
+<div class="viewcode-block" id="CorrelationSelector.fit_transform">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit_transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits and transforms the data by selecting the top k% most correlated features. Performs fit and transform in one step.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The feature data.</span>
+<span class="sd">            y (pd.Series): The target variable.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: The transformed data with selected features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Fitting and transforming data with top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% correlated features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in CorrelationSelector fit_transform: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">X</span></div>
+
+
+<div class="viewcode-block" id="CorrelationSelector.is_numerical">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.is_numerical">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_numerical</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="CorrelationSelector.to_tex">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.to_tex">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a short description of the transformer in dictionary format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Selects the top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="o">*</span><span class="mi">100</span><span class="si">}</span><span class="s2">% (rounded to whole number) of features most correlated with the target variable. Number of features that were selected: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;correlation_percent&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">},</span>
+        <span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FeatureImportanceClassSelector">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FeatureImportanceClassSelector</span><span class="p">(</span><span class="n">FeatureImportanceSelector</span><span class="p">,</span> <span class="n">Categorical</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transformer to select k% (rounded to whole number) of features</span>
+<span class="sd">    that are most important according to Random Forest model for classification.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        k (float): The percentage of top features to keep based on their importance.</span>
+<span class="sd">        selected_columns (list): List of selected columns based on feature importance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the transformer with a specified percentage of top important features to keep.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="FeatureImportanceClassSelector.fit">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;FeatureImportanceClassSelector&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies the feature importances according to the Random Forest model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The input feature data.</span>
+<span class="sd">            y (pd.Series): The target variable.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            FeatureImportanceClassificationSelector: The fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Fitting FeatureImportanceClassificationSelector with top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% important features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span>
+            <span class="n">total_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)</span>
+            <span class="n">num_features_to_select</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">/</span> <span class="mi">100</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">num_features_to_select</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">num_features_to_select</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)[</span><span class="o">-</span><span class="n">num_features_to_select</span><span class="p">:][</span>
+                <span class="p">::</span><span class="o">-</span><span class="mi">1</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in FeatureImportanceClassificationSelector fit: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="FeatureImportanceClassSelector.transform">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects the top k% of features most important according to the Random Forest model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The feature data.</span>
+<span class="sd">            y (pd.Series, optional): The target variable (to append to the result).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: The transformed data with only the selected top k% important features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Transforming data by selecting </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> most important features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">X_selected</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error in FeatureImportanceClassificationSelector transform: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">X_selected</span></div>
+
+
+<div class="viewcode-block" id="FeatureImportanceClassSelector.fit_transform">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit_transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits and transforms the data by selecting the top k% most important features. Performs fit and transform in one step.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The feature data.</span>
+<span class="sd">            y (pd.Series): The target variable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Fitting and transforming data with top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% important features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error in FeatureImportanceClassificationSelector fit_transform: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">X</span></div>
+
+
+<div class="viewcode-block" id="FeatureImportanceClassSelector.to_tex">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.to_tex">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a short description of the transformer in dictionary format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Selects the top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% (rounded to whole number) of features most important according to Random Forest model for classification. Number of features that were selected: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">},</span>
+        <span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FeatureImportanceRegressSelector">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FeatureImportanceRegressSelector</span><span class="p">(</span><span class="n">FeatureImportanceSelector</span><span class="p">,</span> <span class="n">Numerical</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transformer to select k% (rounded to whole number) of features</span>
+<span class="sd">    that are most important according to Random Forest model for regression.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        k (float): The percentage of top features to keep based on their importance.</span>
+<span class="sd">        selected_columns (list): List of selected columns based on feature importance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the transformer with a specified percentage of top important features to keep.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="FeatureImportanceRegressSelector.fit">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;FeatureImportanceRegressSelector&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies the feature importances according to the Random Forest model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The input feature data.</span>
+<span class="sd">            y (pd.Series): The target variable.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            FeatureImportanceRegressionSelector: The fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Fitting FeatureImportanceRegressionSelector with top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% important features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span>
+            <span class="n">total_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)</span>
+            <span class="n">num_features_to_select</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">/</span> <span class="mi">100</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">num_features_to_select</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">num_features_to_select</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)[</span><span class="o">-</span><span class="n">num_features_to_select</span><span class="p">:][</span>
+                <span class="p">::</span><span class="o">-</span><span class="mi">1</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in FeatureImportanceRegressionSelector fit: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="FeatureImportanceRegressSelector.transform">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects the top k% of features most important according to the Random Forest model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The feature data.</span>
+<span class="sd">            y (pd.Series, optional): The target variable (to append to the result).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: The transformed data with only the selected top k% important features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Transforming data by selecting </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> most important features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">X_selected</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in FeatureImportanceRegressionSelector transform: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">X_selected</span></div>
+
+
+<div class="viewcode-block" id="FeatureImportanceRegressSelector.fit_transform">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit_transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits and transforms the data by selecting the top k% most important features. Performs fit and transform in one step.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): The feature data.</span>
+<span class="sd">            y (pd.Series): The target variable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Fitting and transforming data with top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% important features.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error in FeatureImportanceRegressionSelector fit_transform: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">X</span></div>
+
+
+<div class="viewcode-block" id="FeatureImportanceRegressSelector.to_tex">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.to_tex">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_tex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a short description of the transformer in dictionary format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Selects the top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">% (rounded to whole number) of features most important according to Random Forest model for regression. Number of features that were selected: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">},</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Paweł Pozorski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

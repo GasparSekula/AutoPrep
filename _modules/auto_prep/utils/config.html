@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.utils.config &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,11 +69,26 @@
            <div itemprop="articleBody">
              
   <h1>Source code for auto_prep.utils.config</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pylatex</span> <span class="kn">import</span> <span class="n">NoEscape</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pylatex</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoEscape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span><span class="p">,</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">roc_auc_score</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OMP_DISPLAY_ENV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;FALSE&quot;</span>
+<span class="c1"># Suppress UserWarnings and RuntimeWarnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+
+<span class="n">set_config</span><span class="p">(</span><span class="n">transform_output</span><span class="o">=</span><span class="s2">&quot;pandas&quot;</span><span class="p">)</span>
 
 <span class="c1"># ANSI color codes</span>
 <span class="n">COLORS</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
@@ -87,7 +102,7 @@
 
 <span class="n">LOG_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(name)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
 <span class="n">LOG_DATE_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
-<span class="n">LOG_LEVEL</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+<span class="n">LOG_LEVEL</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span>
 
 <span class="n">DEFAULT_TEX_GEOMETRY</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;margin&quot;</span><span class="p">:</span> <span class="s2">&quot;0.5in&quot;</span><span class="p">,</span>
@@ -105,21 +120,62 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">)</span>
 
+<span class="n">DEFAULT_CHARTS_SETTINGS</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title_fontsize&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+    <span class="s2">&quot;title_fontweight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;xlabel_fontsize&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="s2">&quot;ylabel_fontsize&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="s2">&quot;tick_label_rotation&quot;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
+    <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="s2">&quot;pastel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;plot_width&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="s2">&quot;plot_height_per_row&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s2">&quot;heatmap_cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;heatmap_fmt&quot;</span><span class="p">:</span> <span class="s2">&quot;.2f&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">DEFAULT_CORRELATION_SELECTOR_SETTINGS</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">DEFAULT_OUTLIER_DETECTOR_SETTINGS</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;zscore_threshold&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;isol_forest_n_estimators&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;cook_threshold&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">DEFAULT_IMPUTTER_SETTINGS</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;categorical_strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;most_frequent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;numerical_strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_iter&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">DEFAULT_TUNING_PARAMS</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;cv&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;random_state&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s2">&quot;n_iter&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+
 
 <div class="viewcode-block" id="GlobalConfig">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.config.GlobalConfig">[docs]</a>
-<span class="k">class</span> <span class="nc">GlobalConfig</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GlobalConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Global config class.&quot;&quot;&quot;</span>
 
     <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GlobalConfig</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="o">.</span><span class="n">_initialize</span><span class="p">()</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
 
-    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span>
+<div class="viewcode-block" id="GlobalConfig.set">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.config.GlobalConfig.set">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">raport_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;raport&quot;</span><span class="p">,</span>
         <span class="n">raport_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ML Raport&quot;</span><span class="p">,</span>
@@ -138,8 +194,40 @@
         <span class="n">test_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
         <span class="n">valid_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
         <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
-        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="n">max_datasets_after_preprocessing</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">perform_only_required_</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">raport_decimal_precision</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">chart_settings</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">DEFAULT_CHARTS_SETTINGS</span><span class="p">,</span>
+        <span class="n">correlation_selectors_settings</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">DEFAULT_CORRELATION_SELECTOR_SETTINGS</span><span class="p">,</span>
+        <span class="n">outlier_detector_settings</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">DEFAULT_OUTLIER_DETECTOR_SETTINGS</span><span class="p">,</span>
+        <span class="n">imputer_settings</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">DEFAULT_IMPUTTER_SETTINGS</span><span class="p">,</span>
+        <span class="n">umap_components</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="n">correlation_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">correlation_percent</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">outlier_detector_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+        <span class="n">max_unique_values_classification</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">regression_pipeline_scoring_model</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span>
+            <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">warm_start</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">),</span>
+        <span class="n">classification_pipeline_scoring_model</span><span class="p">:</span> <span class="n">BaseEstimator</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+            <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">warm_start</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">),</span>
+        <span class="n">regression_pipeline_scoring_func</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">callable</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">mean_squared_error</span><span class="p">,</span>
+            <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">classification_pipeline_scoring_func_bin</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">callable</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">roc_auc_score</span><span class="p">,</span>
+            <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">classification_pipeline_scoring_func_multi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">callable</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">accuracy_score</span><span class="p">,</span>
+            <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">max_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tuning_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">DEFAULT_TUNING_PARAMS</span><span class="p">,</span>
+        <span class="n">max_models</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
@@ -161,7 +249,7 @@
 <span class="sd">            log_level (str) - Log level for logging liblary.</span>
 <span class="sd">                Defaults to :obj:`LOG_LEVEL`.</span>
 <span class="sd">            log_dir (str) - Log directory for storing the logs.</span>
-<span class="sd">                If None provided, will default to &quot;logs&quot; in root dir.</span>
+<span class="sd">                If None provided, will default to &quot;logs&quot; in directory from which program was called.</span>
 <span class="sd">                -1 means no logging to file.</span>
 <span class="sd">            max_log_file_size_in_mb (int) - Maximum file size in mb for</span>
 <span class="sd">                each logger. Defaults to 5.</span>
@@ -171,6 +259,47 @@
 <span class="sd">            test_size (float) - % of traing set size. Defaults to 0.1.</span>
 <span class="sd">            valid_size (float) - % of traing set size. Defaults to 0.1.</span>
 <span class="sd">            random_state (int) - Random state for sklearn.</span>
+<span class="sd">            max_datasets_after_preprocessing (int) - Maximum number of datasets that will be left</span>
+<span class="sd">                after preprocessing steps. On them further models will be trained. Strongly</span>
+<span class="sd">                affects performance.</span>
+<span class="sd">            perform_only_required_ (bool) - weather or not to perform only required steps.</span>
+<span class="sd">                Affects entire process.</span>
+<span class="sd">            raport_decimal_precision (int) - Decimal precision for all float in raport.</span>
+<span class="sd">                Will use standard python rounding.</span>
+<span class="sd">            chart_settings (dict): Settings for customizing chart appearance.</span>
+<span class="sd">                Defaults to None, which initializes default settings.</span>
+<span class="sd">            correlation_selectors_settings (dict): Settings for correlation selectors.</span>
+<span class="sd">            outlier_detector_settings (dict): Settings for outlier detectors</span>
+<span class="sd">            imputer_settings (dict): Settings for imputers</span>
+<span class="sd">            umap_components (int): Number of components for UMAP.</span>
+<span class="sd">            max_unique_values_classification (int) - in case of target column being of non numerical dtype,</span>
+<span class="sd">                it will calculate number of unique values (in task &quot;auto&quot;). If this number will be lower than</span>
+<span class="sd">                that value, it&#39;ll perform classification.</span>
+<span class="sd">            regression_pipeline_scoring_model (BaseEstimator) - model used for scoring processing pipelines</span>
+<span class="sd">                in classification regression task.</span>
+<span class="sd">            classification_pipeline_scoring_model (BaseEstimator) - model used for scoring processing pipelines</span>
+<span class="sd">                in classification regression task.</span>
+<span class="sd">            regression_pipeline_scoring_func (callable) - metric for scoring :obj:`regression_pipeline_scoring_model` output.</span>
+<span class="sd">            classification_pipeline_scoring_func (callable) - metric for scoring :obj:`classification_pipeline_scoring_model` output.</span>
+<span class="sd">            raport_chart_color_pallete (List[str]) - Color palette for basic eda charts.</span>
+<span class="sd">            max_unique_values_classification (int) - in case of target column being of non numerical dtype,</span>
+<span class="sd">                it will calculate number of unique values (in task &quot;auto&quot;). If this number will be lower than</span>
+<span class="sd">                that value, it&#39;ll perform classification.</span>
+<span class="sd">            regression_pipeline_scoring_model (BaseEstimator) - model used for scoring processing pipelines</span>
+<span class="sd">                in classification regression task.</span>
+<span class="sd">            classification_pipeline_scoring_model (BaseEstimator) - model used for scoring processing pipelines</span>
+<span class="sd">                in classification regression task.</span>
+<span class="sd">            regression_pipeline_scoring_func Union[callable, str] - pair (metric, direction) for scoring :obj:`regression_pipeline_scoring_model` output. Available directions are [&#39;max&#39;, &#39;min&#39;].</span>
+<span class="sd">            classification_pipeline_scoring_func_bin Union[callable, str] - pair (metric, direction) for scoring :obj:`classification_pipeline_scoring_model` output. Available directions are [&#39;max&#39;, &#39;min&#39;].</span>
+<span class="sd">            classification_pipeline_scoring_func_multi Union[callable, str] - pair (metric, direction) for scoring :obj:`classification_pipeline_scoring_model` output. Available directions are [&#39;max&#39;, &#39;min&#39;].</span>
+<span class="sd">            raport_chart_color_pallete (List[str]) - Color palette for basic eda charts.</span>
+<span class="sd">            correlation_threshold (float) - threshold used for detecting highly correlated features.Default 0.8.</span>
+<span class="sd">            correlation_percent (float) - % of selected features based on their correlation with the target. Default 0.5.</span>
+<span class="sd">            n_bins (int) - number of bins to create while binning numerical features.</span>
+<span class="sd">            outlier_detector_method (str) - method used for outlier detection. Default &quot;zscore&quot;.</span>
+<span class="sd">            max_workers (int) - maximum number of cores to evaluate on.</span>
+<span class="sd">            tuning_params (dict) - Tuning params for RandomizedSearchCV.</span>
+<span class="sd">            max_models (int) - Maximum number of final models to save and raport.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="n">raport_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">raport_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
@@ -179,11 +308,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">raport_title</span> <span class="o">=</span> <span class="n">raport_title</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raport_author</span> <span class="o">=</span> <span class="n">raport_author</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raport_abstract</span> <span class="o">=</span> <span class="n">raport_abstract</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span> <span class="o">=</span> <span class="n">root_dir</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">raport_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">raport_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raport_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">raport_name</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">charts_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raport_path</span><span class="p">,</span> <span class="s2">&quot;charts&quot;</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">charts_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipelines_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raport_path</span><span class="p">,</span> <span class="s2">&quot;pipelines&quot;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">return_tex_</span> <span class="o">=</span> <span class="n">return_tex_</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">logger_colors_map</span> <span class="o">=</span> <span class="n">logger_colors_map</span>
@@ -199,7 +329,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_log_file_size_in_mb</span> <span class="o">=</span> <span class="n">max_log_file_size_in_mb</span>
 
         <span class="k">if</span> <span class="n">log_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s2">&quot;logs&quot;</span><span class="p">)</span>
+            <span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">log_dir</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">log_dir</span>
@@ -213,12 +343,102 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">chart_settings</span> <span class="o">=</span> <span class="n">chart_settings</span>
+
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">max_datasets_after_preprocessing</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="p">),</span> <span class="s2">&quot;Values smaller than 1 are forbidden.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_datasets_after_preprocessing</span> <span class="o">=</span> <span class="n">max_datasets_after_preprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perform_only_required_</span> <span class="o">=</span> <span class="n">perform_only_required_</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">raport_decimal_precision</span> <span class="o">=</span> <span class="n">raport_decimal_precision</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_project_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">correlation_threshold</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid value for correlation_threshold: </span><span class="si">{</span><span class="n">correlation_threshold</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;It must be a float between 0 and 1.&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correlation_threshold</span> <span class="o">=</span> <span class="n">correlation_threshold</span>
+
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">correlation_percent</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid value for correlation_selector_percent: </span><span class="si">{</span><span class="n">correlation_percent</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;It must be a float between 0 and 1.&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correlation_percent</span> <span class="o">=</span> <span class="n">correlation_percent</span>
+
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">n_bins</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_bins</span> <span class="ow">and</span> <span class="n">n_bins</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Wrong value for n_bins: </span><span class="si">{</span><span class="n">n_bins</span><span class="si">}</span><span class="s2">. &quot;</span>
+        <span class="s2">&quot;Should be int &gt;= 1.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span> <span class="o">=</span> <span class="n">n_bins</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">correlation_selectors_settings</span> <span class="o">=</span> <span class="n">correlation_selectors_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outlier_detector_settings</span> <span class="o">=</span> <span class="n">outlier_detector_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imputer_settings</span> <span class="o">=</span> <span class="n">imputer_settings</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">umap_components</span> <span class="o">=</span> <span class="n">umap_components</span>
+
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">max_unique_values_classification</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+        <span class="p">),</span> <span class="s2">&quot;max_unique_values_classification should be positive integer.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_unique_values_classification</span> <span class="o">=</span> <span class="n">max_unique_values_classification</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression_pipeline_scoring_model</span> <span class="o">=</span> <span class="n">regression_pipeline_scoring_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification_pipeline_scoring_model</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">classification_pipeline_scoring_model</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">func_</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">regression_pipeline_scoring_func</span><span class="p">,</span>
+            <span class="n">classification_pipeline_scoring_func_bin</span><span class="p">,</span>
+            <span class="n">classification_pipeline_scoring_func_multi</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="k">assert</span> <span class="n">func_</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Unknown direction choosen for </span><span class="si">{</span><span class="n">func_</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression_pipeline_scoring_func</span> <span class="o">=</span> <span class="n">regression_pipeline_scoring_func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification_pipeline_scoring_func</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">classification_pipeline_scoring_func_bin</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification_pipeline_scoring_func_multi</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">classification_pipeline_scoring_func_multi</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">outlier_detector_method</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;iqr&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isolation_forest&quot;</span><span class="p">,</span>
+        <span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Invalid value for outlier_detector_method: </span><span class="si">{</span><span class="n">outlier_detector_method</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="s2">&quot;Should be one of [&#39;zscore&#39;, &#39;iqr&#39;, &#39;isolation_forest&#39;, &#39;cooks_distance&#39;].&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outlier_detector_method</span> <span class="o">=</span> <span class="n">outlier_detector_method</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_workers</span> <span class="o">=</span> <span class="n">max_workers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tuning_params</span> <span class="o">=</span> <span class="n">tuning_params</span>
+
+        <span class="k">assert</span> <span class="n">max_models</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Invalid value&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_models</span> <span class="o">=</span> <span class="n">max_models</span></div>
+
+
 <div class="viewcode-block" id="GlobalConfig.update">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.config.GlobalConfig.update">[docs]</a>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates config&#39;s data with kwargs.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GlobalConfig.prepare_dir">
+<a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.config.GlobalConfig.prepare_dir">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clears and creates all neccessary directories.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">charts_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipelines_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 </div>
 
 

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.visualization package &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -54,7 +54,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#auto-prep-prep-module">auto_prep.prep module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep.prep">auto_prep.prep module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep">Module contents</a></li>
 </ul>
 </li>
@@ -93,26 +93,27 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-auto_prep.visualization.categical">
-<span id="auto-prep-visualization-categical-module"></span><h2>auto_prep.visualization.categical module<a class="headerlink" href="#module-auto_prep.visualization.categical" title="Link to this heading"></a></h2>
+<section id="module-auto_prep.visualization.categorical">
+<span id="auto-prep-visualization-categorical-module"></span><h2>auto_prep.visualization.categorical module<a class="headerlink" href="#module-auto_prep.visualization.categorical" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="auto_prep.visualization.categical.CategoricalVisualizer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.visualization.categical.</span></span><span class="sig-name descname"><span class="pre">CategoricalVisualizer</span></span><a class="reference internal" href="_modules/auto_prep/visualization/categical.html#CategoricalVisualizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.categical.CategoricalVisualizer" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.visualization.categorical.CategoricalVisualizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.visualization.categorical.</span></span><span class="sig-name descname"><span class="pre">CategoricalVisualizer</span></span><a class="reference internal" href="_modules/auto_prep/visualization/categorical.html#CategoricalVisualizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.categorical.CategoricalVisualizer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains methods that generate eda charts for categorical data. Will
 be fed with just categorical columns from original dataset. All methods
-will be called in order defined in <a class="reference internal" href="#auto_prep.visualization.categical.CategoricalVisualizer.order" title="auto_prep.visualization.categical.CategoricalVisualizer.order"><code class="xref py py-obj docutils literal notranslate"><span class="pre">order</span></code></a>. Each method that would
+will be called in order defined in <a class="reference internal" href="#auto_prep.visualization.categorical.CategoricalVisualizer.order" title="auto_prep.visualization.categorical.CategoricalVisualizer.order"><code class="xref py py-obj docutils literal notranslate"><span class="pre">order</span></code></a>. Each method that would
 be called should return a tuple of (path_to_chart, chart title for latex) -
 if there is no need for chart generation should return (“”, “”).
 Charts should be saved via <code class="xref py py-obj docutils literal notranslate"><span class="pre">save_chart</span></code>.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.visualization.categical.CategoricalVisualizer.my_chart">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">my_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/categical.html#CategoricalVisualizer.my_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.categical.CategoricalVisualizer.my_chart" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="auto_prep.visualization.categorical.CategoricalVisualizer.categorical_distribution_chart">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">categorical_distribution_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/categorical.html#CategoricalVisualizer.categorical_distribution_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.categorical.CategoricalVisualizer.categorical_distribution_chart" title="Link to this definition"></a></dt>
+<dd><p>Generates a plot to visualize the distribution of categorical features.</p>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="auto_prep.visualization.categical.CategoricalVisualizer.order">
-<span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['my_chart']</span></em><a class="headerlink" href="#auto_prep.visualization.categical.CategoricalVisualizer.order" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.visualization.categorical.CategoricalVisualizer.order">
+<span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['categorical_distribution_chart']</span></em><a class="headerlink" href="#auto_prep.visualization.categorical.CategoricalVisualizer.order" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -132,15 +133,36 @@ if there is no need for chart generation should return (“”, “”).
 Charts should be saved via <code class="xref py py-obj docutils literal notranslate"><span class="pre">save_chart</span></code>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="auto_prep.visualization.eda.EdaVisualizer.missing_values_chart">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">missing_values_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/eda.html#EdaVisualizer.missing_values_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.eda.EdaVisualizer.missing_values_chart" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">missing_values_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/eda.html#EdaVisualizer.missing_values_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.eda.EdaVisualizer.missing_values_chart" title="Link to this definition"></a></dt>
 <dd><p>Generates a plot to visualize the percentage of missing values for each
 feature in the given DataFrame.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="auto_prep.visualization.eda.EdaVisualizer.order">
-<span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['missing_values_chart']</span></em><a class="headerlink" href="#auto_prep.visualization.eda.EdaVisualizer.order" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['target_distribution_chart',</span> <span class="pre">'missing_values_chart']</span></em><a class="headerlink" href="#auto_prep.visualization.eda.EdaVisualizer.order" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.visualization.eda.EdaVisualizer.target_distribution_chart">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">target_distribution_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'classification'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/eda.html#EdaVisualizer.target_distribution_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.eda.EdaVisualizer.target_distribution_chart" title="Link to this definition"></a></dt>
+<dd><p>Generates a plot to visualize the distribution of the target variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – Input features (not used directly, included for API consistency).</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – Target variable to visualize.</p></li>
+<li><p><strong>task</strong> (<em>str</em>) – Type of task, either “classification” or “regression”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the saved chart and a description of the chart.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -158,14 +180,26 @@ be called should return a tuple of (path_to_chart, chart title for latex) -
 if there is no need for chart generation should return (“”, “”).
 Charts should be saved via <code class="xref py py-obj docutils literal notranslate"><span class="pre">save_chart</span></code>.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.visualization.numerical.NumericalVisualizer.correlation_chart">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">correlation_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/numerical.html#NumericalVisualizer.correlation_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.numerical.NumericalVisualizer.correlation_chart" title="Link to this definition"></a></dt>
-<dd><p>Generates a heatmap of the correlation matrix for the given DataFrame.</p>
+<dt class="sig sig-object py" id="auto_prep.visualization.numerical.NumericalVisualizer.correlation_heatmap_chart">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">correlation_heatmap_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/numerical.html#NumericalVisualizer.correlation_heatmap_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.numerical.NumericalVisualizer.correlation_heatmap_chart" title="Link to this definition"></a></dt>
+<dd><p>Generates a plot to visualize the correlation between features.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.visualization.numerical.NumericalVisualizer.numerical_distribution_chart">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">numerical_distribution_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/numerical.html#NumericalVisualizer.numerical_distribution_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.numerical.NumericalVisualizer.numerical_distribution_chart" title="Link to this definition"></a></dt>
+<dd><p>Generates a plot to visualize the distribution of numerical features.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.visualization.numerical.NumericalVisualizer.numerical_features_boxplot_chart">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">numerical_features_boxplot_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/auto_prep/visualization/numerical.html#NumericalVisualizer.numerical_features_boxplot_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.visualization.numerical.NumericalVisualizer.numerical_features_boxplot_chart" title="Link to this definition"></a></dt>
+<dd><p>Generates boxplots for numerical features, split into multiple pages if necessary.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="auto_prep.visualization.numerical.NumericalVisualizer.order">
-<span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['correlation_chart']</span></em><a class="headerlink" href="#auto_prep.visualization.numerical.NumericalVisualizer.order" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['numerical_distribution_chart',</span> <span class="pre">'correlation_heatmap_chart',</span> <span class="pre">'numerical_features_boxplot_chart']</span></em><a class="headerlink" href="#auto_prep.visualization.numerical.NumericalVisualizer.order" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

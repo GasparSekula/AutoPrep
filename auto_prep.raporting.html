@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.raporting package &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -55,7 +55,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#auto-prep-prep-module">auto_prep.prep module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep.prep">auto_prep.prep module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep">Module contents</a></li>
 </ul>
 </li>
@@ -94,16 +94,63 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
+<section id="module-auto_prep.raporting.eda">
+<span id="auto-prep-raporting-eda-module"></span><h2>auto_prep.raporting.eda module<a class="headerlink" href="#module-auto_prep.raporting.eda" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.raporting.eda.EdaRaport">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.raporting.eda.</span></span><span class="sig-name descname"><span class="pre">EdaRaport</span></span><a class="reference internal" href="_modules/auto_prep/raporting/eda.html#EdaRaport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.eda.EdaRaport" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.raporting.eda.EdaRaport.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/raporting/eda.html#EdaRaport.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.eda.EdaRaport.run" title="Link to this definition"></a></dt>
+<dd><p>Performs dataset EDA analysis based on the given task (classification or regression).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.raporting.eda.EdaRaport.visualizers">
+<span class="sig-name descname"><span class="pre">visualizers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;class</span> <span class="pre">'auto_prep.visualization.eda.EdaVisualizer'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.visualization.categorical.CategoricalVisualizer'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'auto_prep.visualization.numerical.NumericalVisualizer'&gt;]</span></em><a class="headerlink" href="#auto_prep.raporting.eda.EdaRaport.visualizers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.raporting.eda.EdaRaport.write_to_raport">
+<span class="sig-name descname"><span class="pre">write_to_raport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raport</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#auto_prep.raporting.raport.Raport" title="auto_prep.raporting.raport.Raport"><span class="pre">Raport</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/raporting/eda.html#EdaRaport.write_to_raport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.eda.EdaRaport.write_to_raport" title="Link to this definition"></a></dt>
+<dd><p>Writes eda section to a raport</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.raporting.overview">
+<span id="auto-prep-raporting-overview-module"></span><h2>auto_prep.raporting.overview module<a class="headerlink" href="#module-auto_prep.raporting.overview" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.raporting.overview.OverviewRaport">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.raporting.overview.</span></span><span class="sig-name descname"><span class="pre">OverviewRaport</span></span><a class="reference internal" href="_modules/auto_prep/raporting/overview.html#OverviewRaport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.overview.OverviewRaport" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.raporting.overview.OverviewRaport.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/raporting/overview.html#OverviewRaport.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.overview.OverviewRaport.run" title="Link to this definition"></a></dt>
+<dd><p>Performs dataset overview.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.raporting.overview.OverviewRaport.write_to_raport">
+<span class="sig-name descname"><span class="pre">write_to_raport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raport</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#auto_prep.raporting.raport.Raport" title="auto_prep.raporting.raport.Raport"><span class="pre">Raport</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/raporting/overview.html#OverviewRaport.write_to_raport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.overview.OverviewRaport.write_to_raport" title="Link to this definition"></a></dt>
+<dd><p>Writes overview section to a raport</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-auto_prep.raporting.raport">
 <span id="auto-prep-raporting-raport-module"></span><h2>auto_prep.raporting.raport module<a class="headerlink" href="#module-auto_prep.raporting.raport" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.raporting.raport.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.raporting.raport.</span></span><span class="sig-name descname"><span class="pre">Raport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Generates LaTeX reports with analysis results and visualizations.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report.add_figure">
-<span class="sig-name descname"><span class="pre">add_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report.add_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report.add_figure" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_figure">
+<span class="sig-name descname"><span class="pre">add_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_figure" title="Link to this definition"></a></dt>
 <dd><p>Add a figure to the document.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -117,14 +164,43 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report.add_header">
-<span class="sig-name descname"><span class="pre">add_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report.add_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report.add_header" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_header">
+<span class="sig-name descname"><span class="pre">add_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_header" title="Link to this definition"></a></dt>
 <dd><p>Adds the title page and table of contents to the LaTeX document.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report.add_section">
-<span class="sig-name descname"><span class="pre">add_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Section</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report.add_section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report.add_section" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_list">
+<span class="sig-name descname"><span class="pre">add_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_list" title="Link to this definition"></a></dt>
+<dd><p>Adds a bullet-point list to the document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>items</strong> (<em>list</em>) – List of items to include in the bullet-point list.</p></li>
+<li><p><strong>caption</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional caption or description above the list.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_reference">
+<span class="sig-name descname"><span class="pre">add_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Table'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_reference" title="Link to this definition"></a></dt>
+<dd><p>Adds a reference to a labeled element in the document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<em>str</em>) – The label of the element to reference.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – Text to prepend before the reference. Defaults to “Table”.</p></li>
+<li><p><strong>add_space</strong> (<em>bool</em>) – If True, adds a space after the reference. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_section">
+<span class="sig-name descname"><span class="pre">add_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Section</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_section" title="Link to this definition"></a></dt>
 <dd><p>Adds a new section to the LaTeX document.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -143,8 +219,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report.add_subsection">
-<span class="sig-name descname"><span class="pre">add_subsection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Subsection</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report.add_subsection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report.add_subsection" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_subsection">
+<span class="sig-name descname"><span class="pre">add_subsection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Subsection</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_subsection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_subsection" title="Link to this definition"></a></dt>
 <dd><p>Adds a new subsection to the LaTeX document.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -160,9 +236,9 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report.add_table">
-<span class="sig-name descname"><span class="pre">add_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['Category',</span> <span class="pre">'Value']</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report.add_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report.add_table" title="Link to this definition"></a></dt>
-<dd><p>Add a table to the document.</p>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_table">
+<span class="sig-name descname"><span class="pre">add_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['Category',</span> <span class="pre">'Value']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_table" title="Link to this definition"></a></dt>
+<dd><p>Add a table to the document with wrapped text, dividing columns equally across an A4 page.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -170,14 +246,22 @@
 <li><p><strong>caption</strong> (<em>str</em>) – Table caption. If None, no caption will be set.</p></li>
 <li><p><strong>header</strong> (<em>List</em><em>[</em><em>dict</em><em>]</em>) – Table header. Defaults to [“Category”, “Value”].
 If None, no header will be set.</p></li>
+<li><p><strong>widths</strong> (<em>list</em>)</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report.add_verbatim">
-<span class="sig-name descname"><span class="pre">add_verbatim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report.add_verbatim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report.add_verbatim" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_text">
+<span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_text" title="Link to this definition"></a></dt>
+<dd><p>Adds plain text to the LaTeX document.
+Args:         text (str): The text to add to the document.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.add_verbatim">
+<span class="sig-name descname"><span class="pre">add_verbatim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.add_verbatim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.add_verbatim" title="Link to this definition"></a></dt>
 <dd><p>Add verbatim text to the document.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -193,8 +277,8 @@ If None, no header will be set.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.raporting.raport.Report.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Report.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Report.generate" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.raporting.raport.Raport.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/auto_prep/raporting/raport.html#Raport.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.raporting.raport.Raport.generate" title="Link to this definition"></a></dt>
 <dd><p>Generate the final PDF report.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

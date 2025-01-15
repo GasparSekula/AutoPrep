@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.visualization.eda &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,21 +69,22 @@
            <div itemprop="articleBody">
              
   <h1>Source code for auto_prep.visualization.eda</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 
-<span class="kn">from</span> <span class="nn">..utils.logging_config</span> <span class="kn">import</span> <span class="n">setup_logger</span>
-<span class="kn">from</span> <span class="nn">..utils.other</span> <span class="kn">import</span> <span class="n">save_chart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.other</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_chart</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="EdaVisualizer">
 <a class="viewcode-back" href="../../../auto_prep.visualization.html#auto_prep.visualization.eda.EdaVisualizer">[docs]</a>
-<span class="k">class</span> <span class="nc">EdaVisualizer</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EdaVisualizer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Contains methods that generate basic eda charts. Will</span>
 <span class="sd">    be fed with entire original dataset. All methods</span>
@@ -94,44 +95,147 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">order</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;target_distribution_chart&quot;</span><span class="p">,</span>
         <span class="s2">&quot;missing_values_chart&quot;</span><span class="p">,</span>
     <span class="p">]</span>
+
+<div class="viewcode-block" id="EdaVisualizer.target_distribution_chart">
+<a class="viewcode-back" href="../../../auto_prep.visualization.html#auto_prep.visualization.eda.EdaVisualizer.target_distribution_chart">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">target_distribution_chart</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>  <span class="c1"># noqa: F841</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">task</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a plot to visualize the distribution of the target variable.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X (pd.DataFrame): Input features (not used directly, included for API consistency).</span>
+<span class="sd">            y (pd.Series): Target variable to visualize.</span>
+<span class="sd">            task (str): Type of task, either &quot;classification&quot; or &quot;regression&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[str, str]: Path to the saved chart and a description of the chart.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Target distribution visualization.&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span>
+                <span class="n">style</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chart_settings</span><span class="p">[</span><span class="s2">&quot;theme&quot;</span><span class="p">],</span>
+                <span class="n">palette</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chart_settings</span><span class="p">[</span><span class="s2">&quot;palette&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">y_df</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">y_df</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+                    <span class="n">palette</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chart_settings</span><span class="p">[</span><span class="s2">&quot;palette&quot;</span><span class="p">],</span>
+                    <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">patches</span><span class="p">:</span>
+                    <span class="n">height</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                        <span class="n">p</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                        <span class="n">height</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">height</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distribution of </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Target Classes&quot;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Count&quot;</span><span class="p">)</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">save_chart</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;target_distribution_classification.png&quot;</span><span class="p">)</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Target distribution.&quot;</span>
+
+            <span class="k">elif</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
+                <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">y_df</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+                    <span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">mean_value</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="n">median_value</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
+                    <span class="n">mean_value</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+                    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Mean: </span><span class="si">{</span><span class="n">mean_value</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
+                    <span class="n">median_value</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+                    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Median: </span><span class="si">{</span><span class="n">median_value</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distribution of </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Target Value&quot;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">save_chart</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;target_distribution_regression.png&quot;</span><span class="p">)</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Target distribution.&quot;</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Unsupported task type: </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">. Use &#39;classification&#39; or &#39;regression&#39;.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">path</span><span class="p">,</span> <span class="n">description</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Failed to generate target distribution plot for </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="EdaVisualizer.missing_values_chart">
 <a class="viewcode-back" href="../../../auto_prep.visualization.html#auto_prep.visualization.eda.EdaVisualizer.missing_values_chart">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">missing_values_chart</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">missing_values_chart</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>  <span class="c1"># noqa: F841</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates a plot to visualize the percentage of missing values for each</span>
 <span class="sd">        feature in the given DataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Missing values visualizations.&quot;</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-
             <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-            <span class="n">missing</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+            <span class="n">missing</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
             <span class="n">missing</span> <span class="o">=</span> <span class="n">missing</span><span class="p">[</span><span class="n">missing</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-            <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Missing values visualization for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2"> features.&quot;</span>
+            <span class="k">if</span> <span class="n">missing</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;No missing values found in the dataset.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Will create missing values chart for </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">missing</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="si">}</span><span class="s2"> columns.&quot;</span>
             <span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">missing</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No missing values found in the dataset.&quot;</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
-                <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
-
-            <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">missing</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">missing</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">missing</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">missing</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                <span class="n">palette</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">chart_settings</span><span class="p">[</span><span class="s2">&quot;palette&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Percentage of Missing Values by Feature&quot;</span><span class="p">)</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">save_chart</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;missing_values.png&quot;</span><span class="p">)</span>
 
-            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
-
             <span class="k">return</span> <span class="n">path</span><span class="p">,</span> <span class="s2">&quot;Missing values.&quot;</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to generate missing values plot: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">raise</span></div>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span></div>
 </div>
 
 </pre></div>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.raporting.raport &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,43 +69,44 @@
            <div itemprop="articleBody">
              
   <h1>Source code for auto_prep.raporting.raport</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">pylatex</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pylatex</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Center</span><span class="p">,</span>
     <span class="n">Command</span><span class="p">,</span>
     <span class="n">Document</span><span class="p">,</span>
     <span class="n">Figure</span><span class="p">,</span>
+    <span class="n">Itemize</span><span class="p">,</span>
     <span class="n">NoEscape</span><span class="p">,</span>
     <span class="n">Section</span><span class="p">,</span>
     <span class="n">Subsection</span><span class="p">,</span>
     <span class="n">Table</span><span class="p">,</span>
     <span class="n">Tabular</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pylatex.package</span> <span class="kn">import</span> <span class="n">Package</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pylatex.package</span><span class="w"> </span><span class="kn">import</span> <span class="n">Package</span>
 
-<span class="kn">from</span> <span class="nn">..utils.config</span> <span class="kn">import</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">..utils.logging_config</span> <span class="kn">import</span> <span class="n">setup_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Report">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report">[docs]</a>
-<span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
+<div class="viewcode-block" id="Raport">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Raport</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates LaTeX reports with analysis results and visualizations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Report</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Raport</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="o">.</span><span class="n">_initialize</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
 
-    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing ReportGenerator with title: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">raport_title</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -121,14 +122,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Package</span><span class="p">(</span><span class="s2">&quot;hyperref&quot;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Package</span><span class="p">(</span><span class="s2">&quot;caption&quot;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Package</span><span class="p">(</span><span class="s2">&quot;subcaption&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Package</span><span class="p">(</span><span class="s2">&quot;amsmath&quot;</span><span class="p">))</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initialized LaTeX document with packages&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to initialize ReportGenerator: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
             <span class="k">raise</span>
 
-<div class="viewcode-block" id="Report.add_header">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_header">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Raport.add_header">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_header">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds the title page and table of contents to the LaTeX document.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -146,9 +148,9 @@
             <span class="k">raise</span></div>
 
 
-<div class="viewcode-block" id="Report.add_section">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_section">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Section</span><span class="p">:</span>
+<div class="viewcode-block" id="Raport.add_section">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_section">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Section</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a new section to the LaTeX document.</span>
 
@@ -166,9 +168,9 @@
         <span class="k">return</span> <span class="n">section</span></div>
 
 
-<div class="viewcode-block" id="Report.add_subsection">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_subsection">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_subsection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Subsection</span><span class="p">:</span>
+<div class="viewcode-block" id="Raport.add_subsection">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_subsection">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_subsection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Subsection</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a new subsection to the LaTeX document.</span>
 
@@ -183,35 +185,47 @@
         <span class="k">return</span> <span class="n">subsection</span></div>
 
 
-<div class="viewcode-block" id="Report.add_table">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_table">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_table</span><span class="p">(</span>
+<div class="viewcode-block" id="Raport.add_table">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_table">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_table</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span>
         <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">header</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Category&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">],</span>
+        <span class="n">widths</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a table to the document.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a table to the document with wrapped text, dividing columns equally across an A4 page.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (dict | list): Data to convert to table.</span>
 <span class="sd">            caption (str): Table caption. If None, no caption will be set.</span>
 <span class="sd">            header (List[dict]): Table header. Defaults to [&quot;Category&quot;, &quot;Value&quot;].</span>
 <span class="sd">                If None, no header will be set.</span>
+<span class="sd">            widths (list) - column widths</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">decimal_precision</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">raport_decimal_precision</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Table</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">table</span><span class="p">:</span>
                 <span class="k">with</span> <span class="n">table</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Center</span><span class="p">())</span> <span class="k">as</span> <span class="n">centered</span><span class="p">:</span>
-                    <span class="c1"># Determine the number of columns</span>
-                    <span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="c1"># Generate column alignment string (e.g., &quot;l r c&quot; for 3 columns)</span>
-                    <span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;l&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_columns</span><span class="p">)])</span>
+                    <span class="n">centered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">NoEscape</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\renewcommand{\arraystretch}</span><span class="si">{1.5}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="p">)</span>  <span class="c1"># Adjust 1.5 as needed</span>
+
+                    <span class="k">if</span> <span class="n">widths</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># Use provided widths for columns</span>
+                        <span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;p</span><span class="se">{{</span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="s2">mm</span><span class="se">}}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">widths</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;l&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_columns</span><span class="p">)])</span>
 
                     <span class="k">with</span> <span class="n">centered</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Tabular</span><span class="p">(</span><span class="n">alignment</span><span class="p">))</span> <span class="k">as</span> <span class="n">tabular</span><span class="p">:</span>
                         <span class="n">tabular</span><span class="o">.</span><span class="n">add_hline</span><span class="p">()</span>
+
                         <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_columns</span><span class="p">:</span>
                                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -234,7 +248,7 @@
                             <span class="c1"># Format row elements</span>
                             <span class="n">formatted_row</span> <span class="o">=</span> <span class="p">[</span>
                                 <span class="p">(</span>
-                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">decimal_precision</span><span class="si">}</span><span class="s2">f</span><span class="si">}</span><span class="s2">&quot;</span>
                                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
                                     <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                                 <span class="p">)</span>
@@ -242,18 +256,25 @@
                             <span class="p">]</span>
                             <span class="n">tabular</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">formatted_row</span><span class="p">)</span>
 
-                        <span class="n">tabular</span><span class="o">.</span><span class="n">add_hline</span><span class="p">()</span>
+                    <span class="n">tabular</span><span class="o">.</span><span class="n">add_hline</span><span class="p">()</span>
 
                 <span class="k">if</span> <span class="n">caption</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">table</span><span class="o">.</span><span class="n">add_caption</span><span class="p">(</span><span class="n">caption</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># Add label for referencing</span>
+                    <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NoEscape</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">label</span><span class="se">{{</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">))</span>
+
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to add table </span><span class="si">{</span><span class="n">caption</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">raise</span></div>
 
 
-<div class="viewcode-block" id="Report.add_figure">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_figure">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Raport.add_figure">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_figure">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_figure</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a figure to the document.</span>
 
 <span class="sd">        Args:</span>
@@ -266,14 +287,72 @@
                 <span class="n">fig</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">NoEscape</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">\textwidth&quot;</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">caption</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">fig</span><span class="o">.</span><span class="n">add_caption</span><span class="p">(</span><span class="n">caption</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">fig</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NoEscape</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">label</span><span class="se">{{</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to add figure </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">raise</span></div>
 
 
-<div class="viewcode-block" id="Report.add_verbatim">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_verbatim">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_verbatim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Raport.add_text">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds plain text to the LaTeX document.</span>
+<span class="sd">        Args:         text (str): The text to add to the document.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NoEscape</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to add text: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="Raport.add_reference">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_reference">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_reference</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Table&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a reference to a labeled element in the document.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            label (str): The label of the element to reference.</span>
+<span class="sd">            prefix (str): Text to prepend before the reference. Defaults to &quot;Table&quot;.</span>
+<span class="sd">            add_space (bool): If True, adds a space after the reference. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reference</span> <span class="o">=</span> <span class="n">NoEscape</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">~</span><span class="se">\\</span><span class="s2">ref</span><span class="se">{{</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">add_space</span><span class="p">:</span>
+                <span class="n">reference</span> <span class="o">+=</span> <span class="n">NoEscape</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to add reference to </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="Raport.add_list">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a bullet-point list to the document.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            items (list): List of items to include in the bullet-point list.</span>
+<span class="sd">            caption (str, optional): Optional caption or description above the list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">caption</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NoEscape</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\text{&quot;</span> <span class="o">+</span> <span class="n">caption</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;}&quot;</span><span class="p">))</span>
+
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">Itemize</span><span class="p">())</span> <span class="k">as</span> <span class="n">itemize</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                    <span class="n">itemize</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to add list: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="Raport.add_verbatim">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_verbatim">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_verbatim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add verbatim text to the document.</span>
 
 <span class="sd">        Args:</span>
@@ -294,10 +373,11 @@
             <span class="k">raise</span></div>
 
 
-<div class="viewcode-block" id="Report.generate">
-<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Report.generate">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the final PDF report.</span>
+<div class="viewcode-block" id="Raport.generate">
+<a class="viewcode-back" href="../../../auto_prep.raporting.html#auto_prep.raporting.raport.Raport.generate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the final PDF report.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            output_path (str): Path where to save the PDF.</span>
@@ -316,9 +396,6 @@
             <span class="k">raise</span></div>
 </div>
 
-
-
-<span class="n">raport</span> <span class="o">=</span> <span class="n">Report</span><span class="p">()</span>
 </pre></div>
 
            </div>

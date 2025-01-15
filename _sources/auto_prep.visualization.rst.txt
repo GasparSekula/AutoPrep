@@ -4,10 +4,10 @@ auto\_prep.visualization package
 Submodules
 ----------
 
-auto\_prep.visualization.categical module
------------------------------------------
+auto\_prep.visualization.categorical module
+-------------------------------------------
 
-.. automodule:: auto_prep.visualization.categical
+.. automodule:: auto_prep.visualization.categorical
    :members:
    :undoc-members:
    :show-inheritance:

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep package &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -55,7 +55,11 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#auto-prep-prep-module">auto_prep.prep module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-auto_prep.prep">auto_prep.prep module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#auto_prep.prep.AutoPrep"><code class="docutils literal notranslate"><span class="pre">AutoPrep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#auto_prep.prep.format_column_name"><code class="docutils literal notranslate"><span class="pre">format_column_name()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-auto_prep">Module contents</a></li>
 </ul>
 </li>
@@ -95,16 +99,337 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auto_prep.modeling.html">auto_prep.modeling package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.handler">auto_prep.modeling.handler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler"><code class="docutils literal notranslate"><span class="pre">ModelHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.generate_shap"><code class="docutils literal notranslate"><span class="pre">ModelHandler.generate_shap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.load_models"><code class="docutils literal notranslate"><span class="pre">ModelHandler.load_models()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.load_modules"><code class="docutils literal notranslate"><span class="pre">ModelHandler.load_modules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.load_pipelines"><code class="docutils literal notranslate"><span class="pre">ModelHandler.load_pipelines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.run"><code class="docutils literal notranslate"><span class="pre">ModelHandler.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.tune_model"><code class="docutils literal notranslate"><span class="pre">ModelHandler.tune_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.write_to_raport"><code class="docutils literal notranslate"><span class="pre">ModelHandler.write_to_raport()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.custom_sort"><code class="docutils literal notranslate"><span class="pre">custom_sort()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.handler.format_shape"><code class="docutils literal notranslate"><span class="pre">format_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_BayesianRidgeRegressor">auto_prep.modeling.model_BayesianRidgeRegressor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_BayesianRidgeRegressor.ModelBayesianRidgeRegressor"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_BayesianRidgeRegressor.ModelBayesianRidgeRegressor.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_BayesianRidgeRegressor.ModelBayesianRidgeRegressor.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id0"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_BayesianRidgeRegressor.ModelBayesianRidgeRegressor.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_BayesianRidgeRegressor.ModelBayesianRidgeRegressor.set_predict_request"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor.set_predict_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_BayesianRidgeRegressor.ModelBayesianRidgeRegressor.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id1"><code class="docutils literal notranslate"><span class="pre">ModelBayesianRidgeRegressor.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_DecisionTreeClassifier">auto_prep.modeling.model_DecisionTreeClassifier module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_DecisionTreeClassifier.ModelDecisionTreeClassifier"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_DecisionTreeClassifier.ModelDecisionTreeClassifier.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_DecisionTreeClassifier.ModelDecisionTreeClassifier.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id2"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_DecisionTreeClassifier.ModelDecisionTreeClassifier.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_DecisionTreeClassifier.ModelDecisionTreeClassifier.set_predict_proba_request"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.set_predict_proba_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_DecisionTreeClassifier.ModelDecisionTreeClassifier.set_predict_request"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.set_predict_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_DecisionTreeClassifier.ModelDecisionTreeClassifier.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id3"><code class="docutils literal notranslate"><span class="pre">ModelDecisionTreeClassifier.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_GaussianNaiveClassifier">auto_prep.modeling.model_GaussianNaiveClassifier module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GaussianNaiveClassifier.ModelGaussianNaiveClassifier"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GaussianNaiveClassifier.ModelGaussianNaiveClassifier.__init__"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GaussianNaiveClassifier.ModelGaussianNaiveClassifier.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GaussianNaiveClassifier.ModelGaussianNaiveClassifier.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GaussianNaiveClassifier.ModelGaussianNaiveClassifier.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GaussianNaiveClassifier.ModelGaussianNaiveClassifier.set_partial_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier.set_partial_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GaussianNaiveClassifier.ModelGaussianNaiveClassifier.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id4"><code class="docutils literal notranslate"><span class="pre">ModelGaussianNaiveClassifier.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_GradientBoostingRegressor">auto_prep.modeling.model_GradientBoostingRegressor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GradientBoostingRegressor.ModelGradientBoostingRegressor"><code class="docutils literal notranslate"><span class="pre">ModelGradientBoostingRegressor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GradientBoostingRegressor.ModelGradientBoostingRegressor.__init__"><code class="docutils literal notranslate"><span class="pre">ModelGradientBoostingRegressor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GradientBoostingRegressor.ModelGradientBoostingRegressor.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelGradientBoostingRegressor.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GradientBoostingRegressor.ModelGradientBoostingRegressor.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelGradientBoostingRegressor.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GradientBoostingRegressor.ModelGradientBoostingRegressor.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelGradientBoostingRegressor.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_GradientBoostingRegressor.ModelGradientBoostingRegressor.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelGradientBoostingRegressor.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id5"><code class="docutils literal notranslate"><span class="pre">ModelGradientBoostingRegressor.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_KNeighboursClassifier">auto_prep.modeling.model_KNeighboursClassifier module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursClassifier.ModelKNeighboursClassifier"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursClassifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursClassifier.ModelKNeighboursClassifier.__init__"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursClassifier.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursClassifier.ModelKNeighboursClassifier.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursClassifier.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursClassifier.ModelKNeighboursClassifier.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursClassifier.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursClassifier.ModelKNeighboursClassifier.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursClassifier.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id6"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursClassifier.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_KNeighboursRegressor">auto_prep.modeling.model_KNeighboursRegressor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursRegressor.ModelKNeighboursRegressor"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursRegressor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursRegressor.ModelKNeighboursRegressor.__init__"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursRegressor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursRegressor.ModelKNeighboursRegressor.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursRegressor.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursRegressor.ModelKNeighboursRegressor.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursRegressor.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_KNeighboursRegressor.ModelKNeighboursRegressor.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursRegressor.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id7"><code class="docutils literal notranslate"><span class="pre">ModelKNeighboursRegressor.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_LinearRegression">auto_prep.modeling.model_LinearRegression module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearRegression.ModelLinearRegression"><code class="docutils literal notranslate"><span class="pre">ModelLinearRegression</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearRegression.ModelLinearRegression.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelLinearRegression.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearRegression.ModelLinearRegression.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelLinearRegression.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearRegression.ModelLinearRegression.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelLinearRegression.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearRegression.ModelLinearRegression.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelLinearRegression.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_LinearSVR">auto_prep.modeling.model_LinearSVR module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearSVR.ModelLinearSVR"><code class="docutils literal notranslate"><span class="pre">ModelLinearSVR</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearSVR.ModelLinearSVR.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelLinearSVR.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearSVR.ModelLinearSVR.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelLinearSVR.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearSVR.ModelLinearSVR.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelLinearSVR.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LinearSVR.ModelLinearSVR.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelLinearSVR.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_LogisticRegression">auto_prep.modeling.model_LogisticRegression module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LogisticRegression.ModelLogisticRegression"><code class="docutils literal notranslate"><span class="pre">ModelLogisticRegression</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LogisticRegression.ModelLogisticRegression.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelLogisticRegression.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LogisticRegression.ModelLogisticRegression.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelLogisticRegression.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LogisticRegression.ModelLogisticRegression.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelLogisticRegression.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_LogisticRegression.ModelLogisticRegression.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelLogisticRegression.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_RandomForestRegressor">auto_prep.modeling.model_RandomForestRegressor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_RandomForestRegressor.ModelRandomForestRegressor"><code class="docutils literal notranslate"><span class="pre">ModelRandomForestRegressor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_RandomForestRegressor.ModelRandomForestRegressor.__init__"><code class="docutils literal notranslate"><span class="pre">ModelRandomForestRegressor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_RandomForestRegressor.ModelRandomForestRegressor.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelRandomForestRegressor.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_RandomForestRegressor.ModelRandomForestRegressor.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelRandomForestRegressor.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_RandomForestRegressor.ModelRandomForestRegressor.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelRandomForestRegressor.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_RandomForestRegressor.ModelRandomForestRegressor.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelRandomForestRegressor.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id8"><code class="docutils literal notranslate"><span class="pre">ModelRandomForestRegressor.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_SVC">auto_prep.modeling.model_SVC module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_SVC.ModelSVC"><code class="docutils literal notranslate"><span class="pre">ModelSVC</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_SVC.ModelSVC.__init__"><code class="docutils literal notranslate"><span class="pre">ModelSVC.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_SVC.ModelSVC.to_tex"><code class="docutils literal notranslate"><span class="pre">ModelSVC.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_SVC.ModelSVC.PARAM_GRID"><code class="docutils literal notranslate"><span class="pre">ModelSVC.PARAM_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_SVC.ModelSVC.set_fit_request"><code class="docutils literal notranslate"><span class="pre">ModelSVC.set_fit_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#auto_prep.modeling.model_SVC.ModelSVC.set_score_request"><code class="docutils literal notranslate"><span class="pre">ModelSVC.set_score_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.modeling.html#id9"><code class="docutils literal notranslate"><span class="pre">ModelSVC.to_tex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling.model_XGBoost">auto_prep.modeling.model_XGBoost module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.modeling.html#module-auto_prep.modeling">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_prep.preprocessing.html">auto_prep.preprocessing package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.imputer">auto_prep.preprocessing.imputer module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputer.NumericalDataImputer"><code class="docutils literal notranslate"><span class="pre">NumericalDataImputer</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputer.NumericalDataImputer.fit"><code class="docutils literal notranslate"><span class="pre">NumericalDataImputer.fit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputer.NumericalDataImputer.param_grid"><code class="docutils literal notranslate"><span class="pre">NumericalDataImputer.param_grid</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputer.NumericalDataImputer.transform"><code class="docutils literal notranslate"><span class="pre">NumericalDataImputer.transform()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.abstract">auto_prep.preprocessing.abstract module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.DimentionReducer"><code class="docutils literal notranslate"><span class="pre">DimentionReducer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.DimentionReducer.fit"><code class="docutils literal notranslate"><span class="pre">DimentionReducer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.DimentionReducer.fit_transform"><code class="docutils literal notranslate"><span class="pre">DimentionReducer.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.DimentionReducer.to_tex"><code class="docutils literal notranslate"><span class="pre">DimentionReducer.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.DimentionReducer.transform"><code class="docutils literal notranslate"><span class="pre">DimentionReducer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.FeatureImportanceSelector"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceSelector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.FeatureImportanceSelector.k"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceSelector.k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.FeatureImportanceSelector.selected_columns"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceSelector.selected_columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.FeatureImportanceSelector.fit"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceSelector.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.FeatureImportanceSelector.fit_transform"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceSelector.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.abstract.FeatureImportanceSelector.transform"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceSelector.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.binning">auto_prep.preprocessing.binning module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer"><code class="docutils literal notranslate"><span class="pre">BinningTransformer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.threshold"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.should_bin"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.should_bin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.bin_edges"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.bin_edges</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.PARAMS_GRID"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.PARAMS_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.fit"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.fit_transform"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.is_numeric"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.is_numeric()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.to_tex"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.binning.BinningTransformer.transform"><code class="docutils literal notranslate"><span class="pre">BinningTransformer.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.correlation_filtering">auto_prep.preprocessing.correlation_filtering module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.correlation_filtering.CorrelationFilter"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.dropped_columns"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter.dropped_columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.fit"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.fit_transform"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.to_tex"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.transform"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.dimention_reducing">auto_prep.preprocessing.dimention_reducing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer"><code class="docutils literal notranslate"><span class="pre">PCADimentionReducer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.fit"><code class="docutils literal notranslate"><span class="pre">PCADimentionReducer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.fit_transform"><code class="docutils literal notranslate"><span class="pre">PCADimentionReducer.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.to_tex"><code class="docutils literal notranslate"><span class="pre">PCADimentionReducer.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.transform"><code class="docutils literal notranslate"><span class="pre">PCADimentionReducer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer"><code class="docutils literal notranslate"><span class="pre">UMAPDimentionReducer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.fit"><code class="docutils literal notranslate"><span class="pre">UMAPDimentionReducer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.fit_transform"><code class="docutils literal notranslate"><span class="pre">UMAPDimentionReducer.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.to_tex"><code class="docutils literal notranslate"><span class="pre">UMAPDimentionReducer.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.transform"><code class="docutils literal notranslate"><span class="pre">UMAPDimentionReducer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer"><code class="docutils literal notranslate"><span class="pre">VIFDimentionReducer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.fit"><code class="docutils literal notranslate"><span class="pre">VIFDimentionReducer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.fit_transform"><code class="docutils literal notranslate"><span class="pre">VIFDimentionReducer.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.to_tex"><code class="docutils literal notranslate"><span class="pre">VIFDimentionReducer.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.transform"><code class="docutils literal notranslate"><span class="pre">VIFDimentionReducer.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.encoding">auto_prep.preprocessing.encoding module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.encoding.ColumnEncoder"><code class="docutils literal notranslate"><span class="pre">ColumnEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.encoding.ColumnEncoder.encoders"><code class="docutils literal notranslate"><span class="pre">ColumnEncoder.encoders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.encoding.ColumnEncoder.columns"><code class="docutils literal notranslate"><span class="pre">ColumnEncoder.columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.encoding.ColumnEncoder.fit"><code class="docutils literal notranslate"><span class="pre">ColumnEncoder.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.encoding.ColumnEncoder.fit_transform"><code class="docutils literal notranslate"><span class="pre">ColumnEncoder.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.encoding.ColumnEncoder.to_tex"><code class="docutils literal notranslate"><span class="pre">ColumnEncoder.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.encoding.ColumnEncoder.transform"><code class="docutils literal notranslate"><span class="pre">ColumnEncoder.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.feature_selecting">auto_prep.preprocessing.feature_selecting module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector"><code class="docutils literal notranslate"><span class="pre">CorrelationSelector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.selected_columns"><code class="docutils literal notranslate"><span class="pre">CorrelationSelector.selected_columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit"><code class="docutils literal notranslate"><span class="pre">CorrelationSelector.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit_transform"><code class="docutils literal notranslate"><span class="pre">CorrelationSelector.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.is_numerical"><code class="docutils literal notranslate"><span class="pre">CorrelationSelector.is_numerical()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.to_tex"><code class="docutils literal notranslate"><span class="pre">CorrelationSelector.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.CorrelationSelector.transform"><code class="docutils literal notranslate"><span class="pre">CorrelationSelector.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceClassSelector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.k"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceClassSelector.k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.selected_columns"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceClassSelector.selected_columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceClassSelector.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit_transform"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceClassSelector.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.to_tex"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceClassSelector.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.transform"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceClassSelector.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceRegressSelector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.k"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceRegressSelector.k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.selected_columns"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceRegressSelector.selected_columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceRegressSelector.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit_transform"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceRegressSelector.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.to_tex"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceRegressSelector.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.transform"><code class="docutils literal notranslate"><span class="pre">FeatureImportanceRegressSelector.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.handler">auto_prep.preprocessing.handler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler"><code class="docutils literal notranslate"><span class="pre">PreprocessingHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler.run"><code class="docutils literal notranslate"><span class="pre">PreprocessingHandler.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler.score_pipeline_with_model"><code class="docutils literal notranslate"><span class="pre">PreprocessingHandler.score_pipeline_with_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler.write_to_raport"><code class="docutils literal notranslate"><span class="pre">PreprocessingHandler.write_to_raport()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.imputing">auto_prep.preprocessing.imputing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputing.NAImputer"><code class="docutils literal notranslate"><span class="pre">NAImputer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputing.NAImputer.numeric_features"><code class="docutils literal notranslate"><span class="pre">NAImputer.numeric_features</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputing.NAImputer.categorical_features"><code class="docutils literal notranslate"><span class="pre">NAImputer.categorical_features</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputing.NAImputer.fit"><code class="docutils literal notranslate"><span class="pre">NAImputer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputing.NAImputer.fit_transform"><code class="docutils literal notranslate"><span class="pre">NAImputer.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputing.NAImputer.to_tex"><code class="docutils literal notranslate"><span class="pre">NAImputer.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.imputing.NAImputer.transform"><code class="docutils literal notranslate"><span class="pre">NAImputer.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.outlier_detecting">auto_prep.preprocessing.outlier_detecting module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.outlier_detecting.OutlierDetector"><code class="docutils literal notranslate"><span class="pre">OutlierDetector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.outlier_detecting.OutlierDetector.fit"><code class="docutils literal notranslate"><span class="pre">OutlierDetector.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.outlier_detecting.OutlierDetector.fit_transform"><code class="docutils literal notranslate"><span class="pre">OutlierDetector.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.outlier_detecting.OutlierDetector.to_tex"><code class="docutils literal notranslate"><span class="pre">OutlierDetector.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.outlier_detecting.OutlierDetector.transform"><code class="docutils literal notranslate"><span class="pre">OutlierDetector.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.redundancy_filtering">auto_prep.preprocessing.redundancy_filtering module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.redundancy_filtering.UniqueFilter"><code class="docutils literal notranslate"><span class="pre">UniqueFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.dropped_columns"><code class="docutils literal notranslate"><span class="pre">UniqueFilter.dropped_columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.fit"><code class="docutils literal notranslate"><span class="pre">UniqueFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.fit_transform"><code class="docutils literal notranslate"><span class="pre">UniqueFilter.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.to_tex"><code class="docutils literal notranslate"><span class="pre">UniqueFilter.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.transform"><code class="docutils literal notranslate"><span class="pre">UniqueFilter.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.scaling">auto_prep.preprocessing.scaling module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler"><code class="docutils literal notranslate"><span class="pre">ColumnScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler.scaler"><code class="docutils literal notranslate"><span class="pre">ColumnScaler.scaler</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler.PARAMS_GRID"><code class="docutils literal notranslate"><span class="pre">ColumnScaler.PARAMS_GRID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler.fit"><code class="docutils literal notranslate"><span class="pre">ColumnScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler.fit_transform"><code class="docutils literal notranslate"><span class="pre">ColumnScaler.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler.is_numerical"><code class="docutils literal notranslate"><span class="pre">ColumnScaler.is_numerical()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler.to_tex"><code class="docutils literal notranslate"><span class="pre">ColumnScaler.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.scaling.ColumnScaler.transform"><code class="docutils literal notranslate"><span class="pre">ColumnScaler.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.utils">auto_prep.preprocessing.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.utils.TolerantLabelEncoder"><code class="docutils literal notranslate"><span class="pre">TolerantLabelEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.utils.TolerantLabelEncoder.inverse_transform"><code class="docutils literal notranslate"><span class="pre">TolerantLabelEncoder.inverse_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.utils.TolerantLabelEncoder.set_transform_request"><code class="docutils literal notranslate"><span class="pre">TolerantLabelEncoder.set_transform_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.utils.TolerantLabelEncoder.transform"><code class="docutils literal notranslate"><span class="pre">TolerantLabelEncoder.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.preprocessing.html#module-auto_prep.preprocessing.variance_filtering">auto_prep.preprocessing.variance_filtering module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.variance_filtering.VarianceFilter"><code class="docutils literal notranslate"><span class="pre">VarianceFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.variance_filtering.VarianceFilter.dropped_columns"><code class="docutils literal notranslate"><span class="pre">VarianceFilter.dropped_columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.variance_filtering.VarianceFilter.fit"><code class="docutils literal notranslate"><span class="pre">VarianceFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.variance_filtering.VarianceFilter.fit_transform"><code class="docutils literal notranslate"><span class="pre">VarianceFilter.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.variance_filtering.VarianceFilter.to_tex"><code class="docutils literal notranslate"><span class="pre">VarianceFilter.to_tex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.preprocessing.html#auto_prep.preprocessing.variance_filtering.VarianceFilter.transform"><code class="docutils literal notranslate"><span class="pre">VarianceFilter.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -114,15 +439,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_prep.raporting.html">auto_prep.raporting package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.raporting.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.raporting.html#module-auto_prep.raporting.eda">auto_prep.raporting.eda module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.eda.EdaRaport"><code class="docutils literal notranslate"><span class="pre">EdaRaport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.eda.EdaRaport.run"><code class="docutils literal notranslate"><span class="pre">EdaRaport.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.eda.EdaRaport.visualizers"><code class="docutils literal notranslate"><span class="pre">EdaRaport.visualizers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.eda.EdaRaport.write_to_raport"><code class="docutils literal notranslate"><span class="pre">EdaRaport.write_to_raport()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.raporting.html#module-auto_prep.raporting.overview">auto_prep.raporting.overview module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.overview.OverviewRaport"><code class="docutils literal notranslate"><span class="pre">OverviewRaport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.overview.OverviewRaport.run"><code class="docutils literal notranslate"><span class="pre">OverviewRaport.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.overview.OverviewRaport.write_to_raport"><code class="docutils literal notranslate"><span class="pre">OverviewRaport.write_to_raport()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.raporting.html#module-auto_prep.raporting.raport">auto_prep.raporting.raport module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_figure"><code class="docutils literal notranslate"><span class="pre">Report.add_figure()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_header"><code class="docutils literal notranslate"><span class="pre">Report.add_header()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_section"><code class="docutils literal notranslate"><span class="pre">Report.add_section()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_subsection"><code class="docutils literal notranslate"><span class="pre">Report.add_subsection()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_table"><code class="docutils literal notranslate"><span class="pre">Report.add_table()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report.add_verbatim"><code class="docutils literal notranslate"><span class="pre">Report.add_verbatim()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Report.generate"><code class="docutils literal notranslate"><span class="pre">Report.generate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport"><code class="docutils literal notranslate"><span class="pre">Raport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_figure"><code class="docutils literal notranslate"><span class="pre">Raport.add_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_header"><code class="docutils literal notranslate"><span class="pre">Raport.add_header()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_list"><code class="docutils literal notranslate"><span class="pre">Raport.add_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_reference"><code class="docutils literal notranslate"><span class="pre">Raport.add_reference()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_section"><code class="docutils literal notranslate"><span class="pre">Raport.add_section()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_subsection"><code class="docutils literal notranslate"><span class="pre">Raport.add_subsection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_table"><code class="docutils literal notranslate"><span class="pre">Raport.add_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_text"><code class="docutils literal notranslate"><span class="pre">Raport.add_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.add_verbatim"><code class="docutils literal notranslate"><span class="pre">Raport.add_verbatim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.raporting.html#auto_prep.raporting.raport.Raport.generate"><code class="docutils literal notranslate"><span class="pre">Raport.generate()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -134,14 +479,22 @@
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.utils.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.utils.html#module-auto_prep.utils.abstract">auto_prep.utils.abstract module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Categorical"><code class="docutils literal notranslate"><span class="pre">Categorical</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep"><code class="docutils literal notranslate"><span class="pre">NonRequiredStep</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep.is_applicable"><code class="docutils literal notranslate"><span class="pre">NonRequiredStep.is_applicable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Classifier"><code class="docutils literal notranslate"><span class="pre">Classifier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler"><code class="docutils literal notranslate"><span class="pre">ModulesHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps"><code class="docutils literal notranslate"><span class="pre">ModulesHandler.construct_pipelines_steps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.construct_pipelines_steps_helper"><code class="docutils literal notranslate"><span class="pre">ModulesHandler.construct_pipelines_steps_helper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.get_subpackage"><code class="docutils literal notranslate"><span class="pre">ModulesHandler.get_subpackage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.load_classes"><code class="docutils literal notranslate"><span class="pre">ModulesHandler.load_classes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.supported_combinations"><code class="docutils literal notranslate"><span class="pre">ModulesHandler.supported_combinations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.ModulesHandler.supported_interfaces"><code class="docutils literal notranslate"><span class="pre">ModulesHandler.supported_interfaces</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep"><code class="docutils literal notranslate"><span class="pre">NonRequiredStep</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical"><code class="docutils literal notranslate"><span class="pre">Numerical</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NumericalCategorical"><code class="docutils literal notranslate"><span class="pre">NumericalCategorical</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Regressor"><code class="docutils literal notranslate"><span class="pre">Regressor</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep"><code class="docutils literal notranslate"><span class="pre">RequiredStep</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Step"><code class="docutils literal notranslate"><span class="pre">Step</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Step.is_numerical"><code class="docutils literal notranslate"><span class="pre">Step.is_numerical()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Step.to_tex"><code class="docutils literal notranslate"><span class="pre">Step.to_tex()</span></code></a></li>
 </ul>
 </li>
@@ -149,6 +502,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.utils.html#module-auto_prep.utils.config">auto_prep.utils.config module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.config.GlobalConfig"><code class="docutils literal notranslate"><span class="pre">GlobalConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.config.GlobalConfig.prepare_dir"><code class="docutils literal notranslate"><span class="pre">GlobalConfig.prepare_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.config.GlobalConfig.set"><code class="docutils literal notranslate"><span class="pre">GlobalConfig.set()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.config.GlobalConfig.update"><code class="docutils literal notranslate"><span class="pre">GlobalConfig.update()</span></code></a></li>
 </ul>
 </li>
@@ -168,19 +523,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.utils.html#module-auto_prep.utils.other">auto_prep.utils.other module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.other.get_scoring"><code class="docutils literal notranslate"><span class="pre">get_scoring()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.other.save_chart"><code class="docutils literal notranslate"><span class="pre">save_chart()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.other.save_json"><code class="docutils literal notranslate"><span class="pre">save_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.other.save_model"><code class="docutils literal notranslate"><span class="pre">save_model()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="auto_prep.utils.html#auto-prep-utils-system-module">auto_prep.utils.system module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.utils.html#module-auto_prep.utils.system">auto_prep.utils.system module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.system.get_system_info"><code class="docutils literal notranslate"><span class="pre">get_system_info()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.utils.html#module-auto_prep.utils">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_prep.visualization.html">auto_prep.visualization package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.visualization.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auto_prep.visualization.html#module-auto_prep.visualization.categical">auto_prep.visualization.categical module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.categical.CategoricalVisualizer"><code class="docutils literal notranslate"><span class="pre">CategoricalVisualizer</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.categical.CategoricalVisualizer.my_chart"><code class="docutils literal notranslate"><span class="pre">CategoricalVisualizer.my_chart()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.categical.CategoricalVisualizer.order"><code class="docutils literal notranslate"><span class="pre">CategoricalVisualizer.order</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_prep.visualization.html#module-auto_prep.visualization.categorical">auto_prep.visualization.categorical module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.categorical.CategoricalVisualizer"><code class="docutils literal notranslate"><span class="pre">CategoricalVisualizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.categorical.CategoricalVisualizer.categorical_distribution_chart"><code class="docutils literal notranslate"><span class="pre">CategoricalVisualizer.categorical_distribution_chart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.categorical.CategoricalVisualizer.order"><code class="docutils literal notranslate"><span class="pre">CategoricalVisualizer.order</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -189,13 +550,16 @@
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.eda.EdaVisualizer"><code class="docutils literal notranslate"><span class="pre">EdaVisualizer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.eda.EdaVisualizer.missing_values_chart"><code class="docutils literal notranslate"><span class="pre">EdaVisualizer.missing_values_chart()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.eda.EdaVisualizer.order"><code class="docutils literal notranslate"><span class="pre">EdaVisualizer.order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.eda.EdaVisualizer.target_distribution_chart"><code class="docutils literal notranslate"><span class="pre">EdaVisualizer.target_distribution_chart()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="auto_prep.visualization.html#module-auto_prep.visualization.numerical">auto_prep.visualization.numerical module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.numerical.NumericalVisualizer"><code class="docutils literal notranslate"><span class="pre">NumericalVisualizer</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.numerical.NumericalVisualizer.correlation_chart"><code class="docutils literal notranslate"><span class="pre">NumericalVisualizer.correlation_chart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.numerical.NumericalVisualizer.correlation_heatmap_chart"><code class="docutils literal notranslate"><span class="pre">NumericalVisualizer.correlation_heatmap_chart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.numerical.NumericalVisualizer.numerical_distribution_chart"><code class="docutils literal notranslate"><span class="pre">NumericalVisualizer.numerical_distribution_chart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.numerical.NumericalVisualizer.numerical_features_boxplot_chart"><code class="docutils literal notranslate"><span class="pre">NumericalVisualizer.numerical_features_boxplot_chart()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="auto_prep.visualization.html#auto_prep.visualization.numerical.NumericalVisualizer.order"><code class="docutils literal notranslate"><span class="pre">NumericalVisualizer.order</span></code></a></li>
 </ul>
 </li>
@@ -210,8 +574,36 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="auto-prep-prep-module">
-<h2>auto_prep.prep module<a class="headerlink" href="#auto-prep-prep-module" title="Link to this heading"></a></h2>
+<section id="module-auto_prep.prep">
+<span id="auto-prep-prep-module"></span><h2>auto_prep.prep module<a class="headerlink" href="#module-auto_prep.prep" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.prep.AutoPrep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.prep.</span></span><span class="sig-name descname"><span class="pre">AutoPrep</span></span><a class="reference internal" href="_modules/auto_prep/prep.html#AutoPrep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.prep.AutoPrep" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main pipeline orchestrating the entire preprocessing process.</p>
+<p>This class handles the complete workflow from data preprocessing to
+report generation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.prep.AutoPrep.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/prep.html#AutoPrep.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.prep.AutoPrep.run" title="Link to this definition"></a></dt>
+<dd><p>Run the complete pipeline on the provided dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em>) – Input dataset to process.</p></li>
+<li><p><strong>target_column</strong> (<em>str</em>) – Name of the target variable column.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="auto_prep.prep.format_column_name">
+<span class="sig-prename descclassname"><span class="pre">auto_prep.prep.</span></span><span class="sig-name descname"><span class="pre">format_column_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#auto_prep.prep.format_column_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-auto_prep">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-auto_prep" title="Link to this heading"></a></h2>

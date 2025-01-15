@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.utils.logging_config &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -69,23 +69,23 @@
            <div itemprop="articleBody">
              
   <h1>Source code for auto_prep.utils.logging_config</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">logging.handlers</span> <span class="kn">import</span> <span class="n">RotatingFileHandler</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">logging.handlers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RotatingFileHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">.config</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 
 
 <div class="viewcode-block" id="ColoredFormatter">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.logging_config.ColoredFormatter">[docs]</a>
-<span class="k">class</span> <span class="nc">ColoredFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ColoredFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom formatter adding colors to levelname and timing information.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ColoredFormatter.format">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.logging_config.ColoredFormatter.format">[docs]</a>
-    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Formats a logging record into a string.</span>
 
@@ -113,10 +113,10 @@
 
 <div class="viewcode-block" id="TimedLogger">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.logging_config.TimedLogger">[docs]</a>
-<span class="k">class</span> <span class="nc">TimedLogger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TimedLogger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Logger subclass that tracks operation timing.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the TimedLogger.</span>
 
@@ -130,7 +130,7 @@
 
 <div class="viewcode-block" id="TimedLogger.start_operation">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.logging_config.TimedLogger.start_operation">[docs]</a>
-    <span class="k">def</span> <span class="nf">start_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initiates the timing of a specific operation.</span>
 
@@ -147,7 +147,7 @@
 
 <div class="viewcode-block" id="TimedLogger.end_operation">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.logging_config.TimedLogger.end_operation">[docs]</a>
-    <span class="k">def</span> <span class="nf">end_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">end_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;End timing the current operation and log the elapsed time.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operation_start</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_operation</span><span class="p">:</span>
             <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operation_start</span>
@@ -160,7 +160,7 @@
 
 <div class="viewcode-block" id="setup_logger">
 <a class="viewcode-back" href="../../../auto_prep.utils.html#auto_prep.utils.logging_config.setup_logger">[docs]</a>
-<span class="k">def</span> <span class="nf">setup_logger</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TimedLogger</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_logger</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TimedLogger</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sets up a logger with both file and console handlers.</span>
 

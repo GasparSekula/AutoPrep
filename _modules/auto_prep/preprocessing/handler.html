@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>auto_prep.preprocessing.handler &mdash; AutoPrep  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AutoPrep
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">auto_prep</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AutoPrep</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">auto_prep.preprocessing.handler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for auto_prep.preprocessing.handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">humanize</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pylatex.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoEscape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">LabelEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.abstract</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModulesHandler</span><span class="p">,</span> <span class="n">Step</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.other</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_scoring</span><span class="p">,</span> <span class="n">save_json</span><span class="p">,</span> <span class="n">save_model</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fit_pipeline</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error fitting pipeline </span><span class="si">{</span><span class="n">pipeline</span><span class="o">.</span><span class="n">steps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">return</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_score_pipeline</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">score_func</span><span class="p">):</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">PreprocessingHandler</span><span class="o">.</span><span class="n">score_pipeline_with_model</span><span class="p">(</span>
+        <span class="n">preprocessing_pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">score_func</span><span class="o">=</span><span class="n">score_func</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+        <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+        <span class="n">X_valid</span><span class="o">=</span><span class="n">X_valid</span><span class="p">,</span>
+        <span class="n">y_valid</span><span class="o">=</span><span class="n">y_valid</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span>
+    <span class="k">return</span> <span class="n">score</span><span class="p">,</span> <span class="n">duration</span>
+
+
+<div class="viewcode-block" id="PreprocessingHandler">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PreprocessingHandler</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps_exploded</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Pipeline</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fit_durations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_score_durations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fit_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_score_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_scores</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_descr</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_best_pipelines_idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_direction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target_encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PreprocessingHandler.run">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">X_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs dataset preprocessing and scoring.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X_train (pd.DataFrame): Training feature dataset.</span>
+<span class="sd">            y_train (pd.Series): Training target dataset.</span>
+<span class="sd">            X_valid (pd.DataFrame): Validation feature dataset.</span>
+<span class="sd">            y_valid (pd.Series): Validation target dataset.</span>
+<span class="sd">            task (str): regiression / classification</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Preprocessing.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_direction</span> <span class="o">=</span> <span class="n">get_scoring</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">regression_pipeline_scoring_model</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">classification_pipeline_scoring_model</span>
+            <span class="n">y_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_target_encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+            <span class="n">y_valid</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_target_encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y_valid</span><span class="p">))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating pipelines...&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Creating pipelines</span>
+        <span class="k">for</span> <span class="n">step_name</span><span class="p">,</span> <span class="n">package_name</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;Imputting missing data.&quot;</span><span class="p">,</span> <span class="s2">&quot;.imputing&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Removing redundant columns.&quot;</span><span class="p">,</span> <span class="s2">&quot;.redundancy_filtering&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Encoding data.&quot;</span><span class="p">,</span> <span class="s2">&quot;.encoding&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Removing zero variance columns.&quot;</span><span class="p">,</span> <span class="s2">&quot;.variance_filtering&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Removing correlated features.&quot;</span><span class="p">,</span> <span class="s2">&quot;.correlation_filtering&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Scaling data.&quot;</span><span class="p">,</span> <span class="s2">&quot;.scaling&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Features selection.&quot;</span><span class="p">,</span> <span class="s2">&quot;.feature_selecting&quot;</span><span class="p">),</span>
+            <span class="c1"># (&quot;Binning data.&quot;, &quot;.binning&quot;),</span>
+            <span class="p">(</span><span class="s2">&quot;Dinemtionality reduction.&quot;</span><span class="p">,</span> <span class="s2">&quot;.dimention_reducing&quot;</span><span class="p">),</span>
+        <span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">construct_pipelines_steps_helper</span><span class="p">(</span>
+                <span class="n">step_name</span><span class="p">,</span>
+                <span class="n">package_name</span><span class="p">,</span>
+                <span class="vm">__file__</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span><span class="p">,</span>
+                <span class="n">required_only_</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">perform_only_required_</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracted </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span><span class="p">)</span><span class="si">}</span><span class="s2"> pipelines.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracted pipelines: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Exploding pipeline steps</span>
+        <span class="k">for</span> <span class="n">pipeline_steps</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span><span class="p">:</span>
+            <span class="n">current_pipeline_steps_exploded</span> <span class="o">=</span> <span class="n">PreprocessingHandler</span><span class="o">.</span><span class="n">_explode_steps</span><span class="p">(</span>
+                <span class="n">pipeline_steps</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Exploded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pipeline_steps</span><span class="p">)</span><span class="si">}</span><span class="s2"> steps into </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">current_pipeline_steps_exploded</span><span class="p">)</span><span class="si">}</span><span class="s2"> steps.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">current_pipeline_steps_exploded</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">(</span><span class="n">entry</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps_exploded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exploded into </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="p">)</span><span class="si">}</span><span class="s2"> pipelines.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Fitting and scoring inside a method (protected by the entry point)</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Fitting pipelines...&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">(</span>
+            <span class="n">max_workers</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">max_workers</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                <span class="n">partial</span><span class="p">(</span><span class="n">_fit_pipeline</span><span class="p">,</span> <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">&gt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+                <span class="n">gen</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Fitting pipelines&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_durations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_descr</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fit_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Scoring pipelines...&quot;</span><span class="p">)</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">(</span>
+            <span class="n">max_workers</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">max_workers</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                <span class="n">partial</span><span class="p">(</span>
+                    <span class="n">_score_pipeline</span><span class="p">,</span>
+                    <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                    <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+                    <span class="n">X_valid</span><span class="o">=</span><span class="n">X_valid</span><span class="p">,</span>
+                    <span class="n">y_valid</span><span class="o">=</span><span class="n">y_valid</span><span class="p">,</span>
+                    <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span>
+                    <span class="n">score_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">&gt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+                <span class="n">gen</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Scoring pipelines&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;pipeline&quot;</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_scores</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_score_durations</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_scores</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_scores</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_best_pipelines_idx</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_scores</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">max_datasets_after_preprocessing</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">index</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">score_idx</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_best_pipelines_idx</span><span class="p">):</span>
+            <span class="n">save_model</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;preprocessing_pipeline_</span><span class="si">{</span><span class="n">score_idx</span><span class="si">}</span><span class="s2">.joblib&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># to save space</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_score_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PreprocessingHandler.write_to_raport">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler.write_to_raport">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_to_raport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raport</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes overview section to a raport&quot;&quot;&quot;</span>
+
+        <span class="n">preprocessing_section</span> <span class="o">=</span> <span class="n">raport</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;Preprocessing&quot;</span><span class="p">)</span>  <span class="c1"># noqa: F841</span>
+        <span class="n">section_desc</span> <span class="o">=</span> <span class="s2">&quot;This part of the report presents the results of the preprocessing process. It contains required, as well as non required, steps listed below.&quot;</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">section_desc</span><span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NoEscape</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NoEscape</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="n">required_steps</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Missing data imputation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Removing columns with 100</span><span class="si">% u</span><span class="s2">nique categorical values&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Categorical features encoding&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Scaling&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Removing columns with 0 variance&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Detecting highly correlatd features&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">non_required_steps</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Feature selection methods : Correlation with the target or Random Forest feature importance&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Dimention reduction techniques: PCA, VIF, UMAP&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_list</span><span class="p">(</span><span class="n">required_steps</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Required preprocessing steps:&quot;</span><span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_list</span><span class="p">(</span><span class="n">non_required_steps</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Additional preprocessing steps:&quot;</span><span class="p">)</span>
+
+        <span class="n">result_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Preprocessing process was configured to select up to </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">max_datasets_after_preprocessing</span><span class="si">}</span><span class="s2"> best unique preprocessing pipelines.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; Pipelines were scored based on a simple model. Tables below show detailed description of the best pipelines as well as all step combinations that were examined.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">result_desc</span><span class="p">)</span>
+        <span class="n">pipeline_scores_description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_scores</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">prefixed_pipeline_scores_description</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sa">f</span><span class="s2">&quot;scores_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">pipeline_scores_description</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="n">statistics</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Unique created pipelines&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span><span class="p">),</span>
+            <span class="s2">&quot;All created pipelines (after exploading each step params)&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps_exploded</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;All pipelines fit time&quot;</span><span class="p">:</span> <span class="n">humanize</span><span class="o">.</span><span class="n">naturaldelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fit_time</span><span class="p">),</span>
+            <span class="s2">&quot;All pipelines score time&quot;</span><span class="p">:</span> <span class="n">humanize</span><span class="o">.</span><span class="n">naturaldelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_score_time</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">prefixed_pipeline_scores_description</span><span class="p">,</span>
+            <span class="s2">&quot;Scoring function&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;Scoring model&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">pipelines_overview</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pipeline_steps</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps</span><span class="p">):</span>
+            <span class="n">pipelines_overview</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">pipeline_steps</span><span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="n">pipelines_overview</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Pipelines steps overview.&quot;</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">],</span>
+            <span class="n">widths</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">160</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">best_pipelines_overview</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">score_idx</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_best_pipelines_idx</span><span class="p">):</span>
+            <span class="n">best_pipelines_overview</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">score_idx</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;preprocessing_pipeline_</span><span class="si">{</span><span class="n">score_idx</span><span class="si">}</span><span class="s2">.joblib&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+                    <span class="n">humanize</span><span class="o">.</span><span class="n">naturaldelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fit_durations</span><span class="p">[</span><span class="n">idx</span><span class="p">]),</span>
+                    <span class="n">humanize</span><span class="o">.</span><span class="n">naturaldelta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_score_durations</span><span class="p">[</span><span class="n">idx</span><span class="p">]),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="n">best_pipelines_overview</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Best preprocessing pipelines.&quot;</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="p">[</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;file name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;score&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fit duration&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;score duration&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">overview</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;pipelines_overview&quot;</span><span class="p">:</span> <span class="n">pipelines_overview</span><span class="p">,</span>
+            <span class="s2">&quot;best_pipelines_overview&quot;</span><span class="p">:</span> <span class="n">best_pipelines_overview</span><span class="p">,</span>
+            <span class="s2">&quot;statistics&quot;</span><span class="p">:</span> <span class="n">statistics</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">score_idx</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_best_pipelines_idx</span><span class="p">):</span>
+            <span class="n">pipeline_steps_overview</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pipeline_steps_exploded</span><span class="p">[</span><span class="n">idx</span><span class="p">]):</span>
+                <span class="n">tex</span> <span class="o">=</span> <span class="n">step</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_tex</span><span class="p">()</span>
+                <span class="n">pipeline_steps_overview</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">i</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="p">(</span><span class="n">step</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                        <span class="n">tex</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;desc&quot;</span><span class="p">,</span> <span class="s2">&quot;Yet another step.&quot;</span><span class="p">),</span>
+                        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">tex</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;params&quot;</span><span class="p">,</span> <span class="p">{})),</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+
+            <span class="n">overview</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;pipeline_</span><span class="si">{</span><span class="n">score_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pipeline_steps_overview</span>
+
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                <span class="n">pipeline_steps_overview</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Best pipeline No. </span><span class="si">{</span><span class="n">score_idx</span><span class="si">}</span><span class="s2">: steps overview.&quot;</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="p">[</span>
+                    <span class="s2">&quot;step&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;params&quot;</span><span class="p">,</span>
+                <span class="p">],</span>
+                <span class="n">widths</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
+            <span class="p">)</span>
+
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="s2">&quot;\%&quot;</span><span class="p">)</span>  <span class="c1"># noqa W605</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_descr</span><span class="p">[</span><span class="n">score_idx</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span>
+            <span class="p">]</span>
+            <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_descr</span><span class="p">[</span><span class="n">score_idx</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                <span class="n">caption</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Best pipeline No. </span><span class="si">{</span><span class="n">score_idx</span><span class="si">}</span><span class="s2">: output overview.&quot;</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="n">statistics</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Preprocessing pipelines runtime statistics.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">save_json</span><span class="p">(</span><span class="s2">&quot;preprocessing_scores.json&quot;</span><span class="p">,</span> <span class="n">overview</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">raport</span></div>
+
+
+<div class="viewcode-block" id="PreprocessingHandler.score_pipeline_with_model">
+<a class="viewcode-back" href="../../../auto_prep.preprocessing.html#auto_prep.preprocessing.handler.PreprocessingHandler.score_pipeline_with_model">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">score_pipeline_with_model</span><span class="p">(</span>
+        <span class="n">preprocessing_pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">BaseEstimator</span><span class="p">,</span>
+        <span class="n">score_func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">X_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluates the performance of a given preprocessing pipeline with a model on validation data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            preprocessing_pipeline (Pipeline): The preprocessing pipeline to be evaluated.</span>
+<span class="sd">            model (BaseEstimator): The model to be used for scoring.</span>
+<span class="sd">            score_func (callable): scoring function for model predictions and y_val.</span>
+<span class="sd">            X_train (pd.DataFrame): Training feature dataset.</span>
+<span class="sd">            y_train (pd.Series): Training target dataset.</span>
+<span class="sd">            X_valid (pd.DataFrame): Validation feature dataset.</span>
+<span class="sd">            y_valid (pd.Series): Validation target dataset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: The score of the pipeline on the validation data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">preprocessing_pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+        <span class="n">X_valid</span> <span class="o">=</span> <span class="n">preprocessing_pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+            <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Scorring pipeline </span><span class="si">{</span><span class="n">preprocessing_pipeline</span><span class="o">.</span><span class="n">steps</span><span class="si">}</span><span class="s2"> failed.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+        <span class="n">score</span> <span class="o">=</span> <span class="n">score_func</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">score</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_explode_steps</span><span class="p">(</span><span class="n">steps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Step</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For each step with class attribute PARAMS_GRID it exploades the grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exploaded_steps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="s2">&quot;PARAMS_GRID&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Exploding for step </span><span class="si">{</span><span class="n">step</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">. Begining with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">exploaded_steps</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+            <span class="n">steps_to_add</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">all_possibilities</span> <span class="o">=</span> <span class="n">PreprocessingHandler</span><span class="o">.</span><span class="n">_exploade_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+                <span class="n">steps_to_add</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">step</span><span class="p">(</span><span class="o">**</span><span class="n">possibility</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">possibility</span> <span class="ow">in</span> <span class="n">all_possibilities</span>
+                <span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">steps_to_add</span> <span class="o">=</span> <span class="p">[(</span><span class="n">step</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">step</span><span class="p">())]</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;missing&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;required positional argument&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">step</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no PARAM_GRID defined yet it requires params.&quot;</span>
+                        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exploaded_steps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">exploaded_steps</span> <span class="o">=</span> <span class="p">[[</span><span class="n">entry</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">steps_to_add</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_exploaded_steps</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">exploaded_steps</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">entry_to_add</span> <span class="ow">in</span> <span class="n">steps_to_add</span><span class="p">:</span>
+                        <span class="n">new_exploaded_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">[</span><span class="o">*</span><span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">],</span> <span class="n">entry_to_add</span><span class="p">]</span>
+                        <span class="p">)</span>
+                <span class="n">exploaded_steps</span> <span class="o">=</span> <span class="n">new_exploaded_steps</span>
+
+        <span class="k">return</span> <span class="n">exploaded_steps</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_exploade_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Exploades dict of Lists into all possible combinations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">combinations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">grid</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">combination</span><span class="p">))</span> <span class="k">for</span> <span class="n">combination</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Paweł Pozorski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

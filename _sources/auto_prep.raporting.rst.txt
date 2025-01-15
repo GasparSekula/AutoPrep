@@ -4,6 +4,22 @@ auto\_prep.raporting package
 Submodules
 ----------
 
+auto\_prep.raporting.eda module
+-------------------------------
+
+.. automodule:: auto_prep.raporting.eda
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.raporting.overview module
+------------------------------------
+
+.. automodule:: auto_prep.raporting.overview
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 auto\_prep.raporting.raport module
 ----------------------------------
 

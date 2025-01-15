@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>auto_prep.preprocessing package &mdash; AutoPrep  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -55,7 +55,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#auto-prep-prep-module">auto_prep.prep module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep.prep">auto_prep.prep module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto_prep.html#module-auto_prep">Module contents</a></li>
 </ul>
 </li>
@@ -94,16 +94,1066 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-auto_prep.preprocessing.imputer">
-<span id="auto-prep-preprocessing-imputer-module"></span><h2>auto_prep.preprocessing.imputer module<a class="headerlink" href="#module-auto_prep.preprocessing.imputer" title="Link to this heading"></a></h2>
+<section id="module-auto_prep.preprocessing.abstract">
+<span id="auto-prep-preprocessing-abstract-module"></span><h2>auto_prep.preprocessing.abstract module<a class="headerlink" href="#module-auto_prep.preprocessing.abstract" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="auto_prep.preprocessing.imputer.NumericalDataImputer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.imputer.</span></span><span class="sig-name descname"><span class="pre">NumericalDataImputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'median'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputer.html#NumericalDataImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputer.NumericalDataImputer" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
-<p>Performs Numerical data imputation</p>
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.DimentionReducer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.abstract.</span></span><span class="sig-name descname"><span class="pre">DimentionReducer</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#DimentionReducer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.DimentionReducer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep" title="auto_prep.utils.abstract.NonRequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">NonRequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract class for dimensionality reduction techniques.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.preprocessing.imputer.NumericalDataImputer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.imputer.NumericalDataImputer" title="auto_prep.preprocessing.imputer.NumericalDataImputer"><span class="pre">NumericalDataImputer</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputer.html#NumericalDataImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputer.NumericalDataImputer.fit" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.DimentionReducer.fit">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.abstract.DimentionReducer" title="auto_prep.preprocessing.abstract.DimentionReducer"><span class="pre">DimentionReducer</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#DimentionReducer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.DimentionReducer.fit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.DimentionReducer.fit_transform">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#DimentionReducer.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.DimentionReducer.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Input samples.</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_outputs</em><em>)</em><em>,                 </em><em>default=None</em>) – Target values (None for unsupervised transformations).</p></li>
+<li><p><strong>**fit_params</strong> (<em>dict</em>) – Additional fit parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>X_new</strong> – Transformed array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray array of shape (n_samples, n_features_new)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.DimentionReducer.to_tex">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#DimentionReducer.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.DimentionReducer.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description in form of dictionary.
+Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.DimentionReducer.transform">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#DimentionReducer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.DimentionReducer.transform" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.FeatureImportanceSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.abstract.</span></span><span class="sig-name descname"><span class="pre">FeatureImportanceSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#FeatureImportanceSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep" title="auto_prep.utils.abstract.NonRequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">NonRequiredStep</span></code></a></p>
+<p>Transformer to select k% (rounded to whole number) of features
+that are most important according to Random Forest model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.FeatureImportanceSelector.k">
+<span class="sig-name descname"><span class="pre">k</span></span><a class="headerlink" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector.k" title="Link to this definition"></a></dt>
+<dd><p>The percentage of top features to keep based on their importance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.FeatureImportanceSelector.selected_columns">
+<span class="sig-name descname"><span class="pre">selected_columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector.selected_columns" title="Link to this definition"></a></dt>
+<dd><p>List of selected columns based on feature importance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.FeatureImportanceSelector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector" title="auto_prep.preprocessing.abstract.FeatureImportanceSelector"><span class="pre">FeatureImportanceSelector</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#FeatureImportanceSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies the top k% (rounded to whole value) of features most important according to the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector" title="auto_prep.preprocessing.abstract.FeatureImportanceSelector">FeatureImportanceSelector</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.FeatureImportanceSelector.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#FeatureImportanceSelector.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data by selecting the top k% most important features. Performs fit and transform in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with selected features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.abstract.FeatureImportanceSelector.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/abstract.html#FeatureImportanceSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector.transform" title="Link to this definition"></a></dt>
+<dd><p>Selects the top k% of features most important according to the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to append to the result).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with only the selected top k% important features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.binning">
+<span id="auto-prep-preprocessing-binning-module"></span><h2>auto_prep.preprocessing.binning module<a class="headerlink" href="#module-auto_prep.preprocessing.binning" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.binning.</span></span><span class="sig-name descname"><span class="pre">BinningTransformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">binning_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'qcut'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/binning.html#BinningTransformer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep" title="auto_prep.utils.abstract.NonRequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">NonRequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
+<p>Transformer for performing binning (using qcut) or equal-width binning (using cut)
+on continuous variables and replacing the values with numeric labels, but only if the number of unique values
+exceeds 50% of the number of samples in the column.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.threshold">
+<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.threshold" title="Link to this definition"></a></dt>
+<dd><p>percent of unique values in a column in order to classify for binning. Default : 0.5</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.should_bin">
+<span class="sig-name descname"><span class="pre">should_bin</span></span><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.should_bin" title="Link to this definition"></a></dt>
+<dd><p>dictionary to track which columns should be binned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.bin_edges">
+<span class="sig-name descname"><span class="pre">bin_edges</span></span><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.bin_edges" title="Link to this definition"></a></dt>
+<dd><p>dictionary to store the bin edged for each column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.PARAMS_GRID">
+<span class="sig-name descname"><span class="pre">PARAMS_GRID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'binning_method':</span> <span class="pre">['qcut',</span> <span class="pre">'cut']}</span></em><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.PARAMS_GRID" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.binning.BinningTransformer" title="auto_prep.preprocessing.binning.BinningTransformer"><span class="pre">BinningTransformer</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/binning.html#BinningTransformer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits the transformer by calculating the bin edges for each continuous column if the number of unique values
+exceeds the threshold of 50%.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.binning.BinningTransformer" title="auto_prep.preprocessing.binning.BinningTransformer">BinningTransformer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/binning.html#BinningTransformer.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with bin labels.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.is_numeric">
+<span class="sig-name descname"><span class="pre">is_numeric</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/binning.html#BinningTransformer.is_numeric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.is_numeric" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/binning.html#BinningTransformer.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a description of the transformer in dictionary format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Description of the transformer.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.binning.BinningTransformer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/binning.html#BinningTransformer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.binning.BinningTransformer.transform" title="Link to this definition"></a></dt>
+<dd><p>Transforms the data by replacing continuous values with their respective bin labels (numeric).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with bin labels.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.correlation_filtering">
+<span id="auto-prep-preprocessing-correlation-filtering-module"></span><h2>auto_prep.preprocessing.correlation_filtering module<a class="headerlink" href="#module-auto_prep.preprocessing.correlation_filtering" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.correlation_filtering.CorrelationFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.correlation_filtering.</span></span><span class="sig-name descname"><span class="pre">CorrelationFilter</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/correlation_filtering.html#CorrelationFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
+<p>Transformer to detect highly correlated features and drop one of them. Pearsons correlation is used.
+Is a required step in preprocessing.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.correlation_filtering.CorrelationFilter.dropped_columns">
+<span class="sig-name descname"><span class="pre">dropped_columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.dropped_columns" title="Link to this definition"></a></dt>
+<dd><p>List of columns that were dropped due to high correlation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.correlation_filtering.CorrelationFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter" title="auto_prep.preprocessing.correlation_filtering.CorrelationFilter"><span class="pre">CorrelationFilter</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/correlation_filtering.html#CorrelationFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies highly correlated features. Adds the second one from the pair to the list of columns to be dropped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted filter instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter" title="auto_prep.preprocessing.correlation_filtering.CorrelationFilter">CorrelationFilter</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.correlation_filtering.CorrelationFilter.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/correlation_filtering.html#CorrelationFilter.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data by removing correlated features. Performs fit and transform in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.correlation_filtering.CorrelationFilter.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/correlation_filtering.html#CorrelationFilter.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description of the transformer in dictionary format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.correlation_filtering.CorrelationFilter.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/correlation_filtering.html#CorrelationFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.correlation_filtering.CorrelationFilter.transform" title="Link to this definition"></a></dt>
+<dd><p>Drops all features identified as highly correlated with another feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with correlated columns removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.dimention_reducing">
+<span id="auto-prep-preprocessing-dimention-reducing-module"></span><h2>auto_prep.preprocessing.dimention_reducing module<a class="headerlink" href="#module-auto_prep.preprocessing.dimention_reducing" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.PCADimentionReducer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.dimention_reducing.</span></span><span class="sig-name descname"><span class="pre">PCADimentionReducer</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#PCADimentionReducer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#auto_prep.preprocessing.abstract.DimentionReducer" title="auto_prep.preprocessing.abstract.DimentionReducer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DimentionReducer</span></code></a></p>
+<p>Combines data standardization and PCA with automatic selection of the number of components
+to preserve 95% of the variance.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer" title="auto_prep.preprocessing.dimention_reducing.PCADimentionReducer"><span class="pre">PCADimentionReducer</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#PCADimentionReducer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits PCA to the data, determining the number of components to preserve
+95% of the variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>optional</em>) – Target values (ignored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer" title="auto_prep.preprocessing.dimention_reducing.PCADimentionReducer">PCADimentionReducer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#PCADimentionReducer.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits the transformer to the data and then transforms it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>optional</em>) – Target values (ignored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#PCADimentionReducer.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description in form of dictionary.
+Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#PCADimentionReducer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.PCADimentionReducer.transform" title="Link to this definition"></a></dt>
+<dd><p>Transforms the input data using fitted PCA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>optional</em>) – Target values (ignored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.dimention_reducing.</span></span><span class="sig-name descname"><span class="pre">UMAPDimentionReducer</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#UMAPDimentionReducer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#auto_prep.preprocessing.abstract.DimentionReducer" title="auto_prep.preprocessing.abstract.DimentionReducer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DimentionReducer</span></code></a></p>
+<p>Reduces the dimensionality of the data using UMAP.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer" title="auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer"><span class="pre">UMAPDimentionReducer</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#UMAPDimentionReducer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits the UMAPDimentionReducer to the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#UMAPDimentionReducer.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits the transformer to the data and then transforms it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#UMAPDimentionReducer.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description in form of dictionary.
+Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#UMAPDimentionReducer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.UMAPDimentionReducer.transform" title="Link to this definition"></a></dt>
+<dd><p>Transforms the input data using the fitted UMAP reducer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.dimention_reducing.</span></span><span class="sig-name descname"><span class="pre">VIFDimentionReducer</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#VIFDimentionReducer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#auto_prep.preprocessing.abstract.DimentionReducer" title="auto_prep.preprocessing.abstract.DimentionReducer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DimentionReducer</span></code></a></p>
+<p>Removes columns with high variance inflation factor (VIF &gt; 10).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer" title="auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer"><span class="pre">VIFDimentionReducer</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#VIFDimentionReducer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits the VIFDimentionReducer to the data, identifying columns with high VIF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>optional</em>) – Target values (ignored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer" title="auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer">VIFDimentionReducer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#VIFDimentionReducer.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits the VIFDimentionReducer to the data and then transforms it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>optional</em>) – Target values (ignored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#VIFDimentionReducer.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description in form of dictionary.
+Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/dimention_reducing.html#VIFDimentionReducer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.dimention_reducing.VIFDimentionReducer.transform" title="Link to this definition"></a></dt>
+<dd><p>Removes columns with high VIF from the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – Input data.</p></li>
+<li><p><strong>y</strong> (<em>optional</em>) – Target values (ignored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.encoding">
+<span id="auto-prep-preprocessing-encoding-module"></span><h2>auto_prep.preprocessing.encoding module<a class="headerlink" href="#module-auto_prep.preprocessing.encoding" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.encoding.ColumnEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.encoding.</span></span><span class="sig-name descname"><span class="pre">ColumnEncoder</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/encoding.html#ColumnEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.encoding.ColumnEncoder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Categorical" title="auto_prep.utils.abstract.Categorical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Categorical</span></code></a></p>
+<p>Encoder for categorical features. This class applies different encoding techniques
+(OneHotEncoding or LabelEncoding) based on the number of unique values in each column.</p>
+<p>For columns with less than 5 unique values, OneHotEncoder is used. For columns with
+5 or more unique values, TolerantLabelEncoder is applied.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.encoding.ColumnEncoder.encoders">
+<span class="sig-name descname"><span class="pre">encoders</span></span><a class="headerlink" href="#auto_prep.preprocessing.encoding.ColumnEncoder.encoders" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of fitted encoders for each column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.encoding.ColumnEncoder.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.encoding.ColumnEncoder.columns" title="Link to this definition"></a></dt>
+<dd><p>A list of columns that have been encoded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.encoding.ColumnEncoder.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.encoding.ColumnEncoder" title="auto_prep.preprocessing.encoding.ColumnEncoder"><span class="pre">ColumnEncoder</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/encoding.html#ColumnEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.encoding.ColumnEncoder.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits the encoder to the categorical features in the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data to fit the encoder to.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to fit the encoder).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted encoder instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.encoding.ColumnEncoder" title="auto_prep.preprocessing.encoding.ColumnEncoder">ColumnEncoder</a></p>
+</dd>
+</dl>
+<p>The encoder will choose between OneHotEncoder and LabelEncoder based on the
+number of unique values in each column. OneHotEncoder is used for columns
+with fewer than 5 unique values, and TolerantLabelEncoder is used for columns with
+5 or more unique values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.encoding.ColumnEncoder.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/encoding.html#ColumnEncoder.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.encoding.ColumnEncoder.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the feature data using the encoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data to transform.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to append to the result).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed feature data, with encoded columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p>This method combines the fit and transform steps in one operation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.encoding.ColumnEncoder.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/encoding.html#ColumnEncoder.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.encoding.ColumnEncoder.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description in form of dictionary.
+Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.encoding.ColumnEncoder.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/encoding.html#ColumnEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.encoding.ColumnEncoder.transform" title="Link to this definition"></a></dt>
+<dd><p>Transforms the feature data using the fitted encoders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data to transform.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to append to the result).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed feature data, with encoded columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.feature_selecting">
+<span id="auto-prep-preprocessing-feature-selecting-module"></span><h2>auto_prep.preprocessing.feature_selecting module<a class="headerlink" href="#module-auto_prep.preprocessing.feature_selecting" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.CorrelationSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.feature_selecting.</span></span><span class="sig-name descname"><span class="pre">CorrelationSelector</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#CorrelationSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NonRequiredStep" title="auto_prep.utils.abstract.NonRequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">NonRequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
+<p>Transformer to select correlation_percent% (rounded to whole number) of features that are most correlated with the target variable.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.CorrelationSelector.selected_columns">
+<span class="sig-name descname"><span class="pre">selected_columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector.selected_columns" title="Link to this definition"></a></dt>
+<dd><p>List of selected columns based on correlation with the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector" title="auto_prep.preprocessing.feature_selecting.CorrelationSelector"><span class="pre">CorrelationSelector</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#CorrelationSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies the top correlation_percent% (rounded to whole value) of features most correlated with the target variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector" title="auto_prep.preprocessing.feature_selecting.CorrelationSelector">CorrelationSelector</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#CorrelationSelector.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data by selecting the top k% most correlated features. Performs fit and transform in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with selected features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.CorrelationSelector.is_numerical">
+<span class="sig-name descname"><span class="pre">is_numerical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#CorrelationSelector.is_numerical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector.is_numerical" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.CorrelationSelector.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#CorrelationSelector.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description of the transformer in dictionary format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.CorrelationSelector.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#CorrelationSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.CorrelationSelector.transform" title="Link to this definition"></a></dt>
+<dd><p>Selects the top correlation_percent% of features most correlated with the target variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to append to the result).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with only the selected top k% correlated features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.feature_selecting.</span></span><span class="sig-name descname"><span class="pre">FeatureImportanceClassSelector</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceClassSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector" title="auto_prep.preprocessing.abstract.FeatureImportanceSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureImportanceSelector</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Categorical" title="auto_prep.utils.abstract.Categorical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Categorical</span></code></a></p>
+<p>Transformer to select k% (rounded to whole number) of features
+that are most important according to Random Forest model for classification.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.k">
+<span class="sig-name descname"><span class="pre">k</span></span><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.k" title="Link to this definition"></a></dt>
+<dd><p>The percentage of top features to keep based on their importance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.selected_columns">
+<span class="sig-name descname"><span class="pre">selected_columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.selected_columns" title="Link to this definition"></a></dt>
+<dd><p>List of selected columns based on feature importance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector" title="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector"><span class="pre">FeatureImportanceClassSelector</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceClassSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies the feature importances according to the Random Forest model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>FeatureImportanceClassificationSelector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceClassSelector.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data by selecting the top k% most important features. Performs fit and transform in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target variable.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceClassSelector.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description of the transformer in dictionary format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceClassSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceClassSelector.transform" title="Link to this definition"></a></dt>
+<dd><p>Selects the top k% of features most important according to the Random Forest model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to append to the result).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with only the selected top k% important features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.feature_selecting.</span></span><span class="sig-name descname"><span class="pre">FeatureImportanceRegressSelector</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceRegressSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#auto_prep.preprocessing.abstract.FeatureImportanceSelector" title="auto_prep.preprocessing.abstract.FeatureImportanceSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureImportanceSelector</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
+<p>Transformer to select k% (rounded to whole number) of features
+that are most important according to Random Forest model for regression.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.k">
+<span class="sig-name descname"><span class="pre">k</span></span><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.k" title="Link to this definition"></a></dt>
+<dd><p>The percentage of top features to keep based on their importance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.selected_columns">
+<span class="sig-name descname"><span class="pre">selected_columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.selected_columns" title="Link to this definition"></a></dt>
+<dd><p>List of selected columns based on feature importance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector" title="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector"><span class="pre">FeatureImportanceRegressSelector</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceRegressSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies the feature importances according to the Random Forest model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>FeatureImportanceRegressionSelector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceRegressSelector.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data by selecting the top k% most important features. Performs fit and transform in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target variable.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceRegressSelector.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description of the transformer in dictionary format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/feature_selecting.html#FeatureImportanceRegressSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.feature_selecting.FeatureImportanceRegressSelector.transform" title="Link to this definition"></a></dt>
+<dd><p>Selects the top k% of features most important according to the Random Forest model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to append to the result).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with only the selected top k% important features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.handler">
+<span id="auto-prep-preprocessing-handler-module"></span><h2>auto_prep.preprocessing.handler module<a class="headerlink" href="#module-auto_prep.preprocessing.handler" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.handler.PreprocessingHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.handler.</span></span><span class="sig-name descname"><span class="pre">PreprocessingHandler</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/handler.html#PreprocessingHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.handler.PreprocessingHandler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.handler.PreprocessingHandler.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_valid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_valid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/handler.html#PreprocessingHandler.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.handler.PreprocessingHandler.run" title="Link to this definition"></a></dt>
+<dd><p>Performs dataset preprocessing and scoring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – Training feature dataset.</p></li>
+<li><p><strong>y_train</strong> (<em>pd.Series</em>) – Training target dataset.</p></li>
+<li><p><strong>X_valid</strong> (<em>pd.DataFrame</em>) – Validation feature dataset.</p></li>
+<li><p><strong>y_valid</strong> (<em>pd.Series</em>) – Validation target dataset.</p></li>
+<li><p><strong>task</strong> (<em>str</em>) – regiression / classification</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.handler.PreprocessingHandler.score_pipeline_with_model">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score_pipeline_with_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocessing_pipeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Pipeline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseEstimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_valid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_valid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/handler.html#PreprocessingHandler.score_pipeline_with_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.handler.PreprocessingHandler.score_pipeline_with_model" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the performance of a given preprocessing pipeline with a model on validation data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>preprocessing_pipeline</strong> (<em>Pipeline</em>) – The preprocessing pipeline to be evaluated.</p></li>
+<li><p><strong>model</strong> (<em>BaseEstimator</em>) – The model to be used for scoring.</p></li>
+<li><p><strong>score_func</strong> (<em>callable</em>) – scoring function for model predictions and y_val.</p></li>
+<li><p><strong>X_train</strong> (<em>pd.DataFrame</em>) – Training feature dataset.</p></li>
+<li><p><strong>y_train</strong> (<em>pd.Series</em>) – Training target dataset.</p></li>
+<li><p><strong>X_valid</strong> (<em>pd.DataFrame</em>) – Validation feature dataset.</p></li>
+<li><p><strong>y_valid</strong> (<em>pd.Series</em>) – Validation target dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The score of the pipeline on the validation data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.handler.PreprocessingHandler.write_to_raport">
+<span class="sig-name descname"><span class="pre">write_to_raport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raport</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/handler.html#PreprocessingHandler.write_to_raport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.handler.PreprocessingHandler.write_to_raport" title="Link to this definition"></a></dt>
+<dd><p>Writes overview section to a raport</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.imputing">
+<span id="auto-prep-preprocessing-imputing-module"></span><h2>auto_prep.preprocessing.imputing module<a class="headerlink" href="#module-auto_prep.preprocessing.imputing" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.imputing.NAImputer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.imputing.</span></span><span class="sig-name descname"><span class="pre">NAImputer</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputing.html#NAImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputing.NAImputer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.NumericalCategorical" title="auto_prep.utils.abstract.NumericalCategorical"><code class="xref py py-class docutils literal notranslate"><span class="pre">NumericalCategorical</span></code></a></p>
+<p>Base class for imputing missing values. Provides functionality
+to identify columns with missing values and determine the strategy to handle them
+(remove columns with &gt;50% missing data).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.imputing.NAImputer.numeric_features">
+<span class="sig-name descname"><span class="pre">numeric_features</span></span><a class="headerlink" href="#auto_prep.preprocessing.imputing.NAImputer.numeric_features" title="Link to this definition"></a></dt>
+<dd><p>A list of numeric feature names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.imputing.NAImputer.categorical_features">
+<span class="sig-name descname"><span class="pre">categorical_features</span></span><a class="headerlink" href="#auto_prep.preprocessing.imputing.NAImputer.categorical_features" title="Link to this definition"></a></dt>
+<dd><p>A list of categorical feature names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.imputing.NAImputer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.imputing.NAImputer" title="auto_prep.preprocessing.imputing.NAImputer"><span class="pre">NAImputer</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputing.html#NAImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputing.NAImputer.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies columns with more than 50% missing values and removes them
+from the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input data with missing values.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted imputer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.imputing.NAImputer" title="auto_prep.preprocessing.imputing.NAImputer">NAImputer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.imputing.NAImputer.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputing.html#NAImputer.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputing.NAImputer.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the input data by imputing missing values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data with missing values imputed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.imputing.NAImputer.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputing.html#NAImputer.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputing.NAImputer.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a description of the transformer in dictionary format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.imputing.NAImputer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputing.html#NAImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputing.NAImputer.transform" title="Link to this definition"></a></dt>
+<dd><p>Removes previously identified columns with &gt;50% missing values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input data to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.outlier_detecting">
+<span id="auto-prep-preprocessing-outlier-detecting-module"></span><h2>auto_prep.preprocessing.outlier_detecting module<a class="headerlink" href="#module-auto_prep.preprocessing.outlier_detecting" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.outlier_detecting.OutlierDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.outlier_detecting.</span></span><span class="sig-name descname"><span class="pre">OutlierDetector</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/outlier_detecting.html#OutlierDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.outlier_detecting.OutlierDetector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
+<p>Performs Numerical data outlier detection</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.outlier_detecting.OutlierDetector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.outlier_detecting.OutlierDetector" title="auto_prep.preprocessing.outlier_detecting.OutlierDetector"><span class="pre">OutlierDetector</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/outlier_detecting.html#OutlierDetector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.outlier_detecting.OutlierDetector.fit" title="Link to this definition"></a></dt>
 <dd><p>Identify feature types in the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -116,7 +1166,7 @@
 <dd class="field-even"><p>Fitted transformer.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.imputer.NumericalDataImputer" title="auto_prep.preprocessing.imputer.NumericalDataImputer">NumericalDataImputer</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.outlier_detecting.OutlierDetector" title="auto_prep.preprocessing.outlier_detecting.OutlierDetector">OutlierDetector</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError if non numerical column included in X.</strong> – </p>
@@ -124,21 +1174,379 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="auto_prep.preprocessing.imputer.NumericalDataImputer.param_grid">
-<span class="sig-name descname"><span class="pre">param_grid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'strategy':</span> <span class="pre">'median'}</span></em><a class="headerlink" href="#auto_prep.preprocessing.imputer.NumericalDataImputer.param_grid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.outlier_detecting.OutlierDetector.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/outlier_detecting.html#OutlierDetector.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.outlier_detecting.OutlierDetector.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fit and transform the data in one step.
+:param X: Input data
+:type X: pd.DataFrame
+:param y: Target data
+:type y: pd.Series</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Transformed data</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="auto_prep.preprocessing.imputer.NumericalDataImputer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/imputer.html#NumericalDataImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.imputer.NumericalDataImputer.transform" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="auto_prep.preprocessing.outlier_detecting.OutlierDetector.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/outlier_detecting.html#OutlierDetector.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.outlier_detecting.OutlierDetector.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a short description in form of dictionary.
+Keys are: name - transformer name, desc - short description, params - class parameters (if None then {}).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.outlier_detecting.OutlierDetector.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/outlier_detecting.html#OutlierDetector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.outlier_detecting.OutlierDetector.transform" title="Link to this definition"></a></dt>
 <dd><p>Applies cleaning and transformation operations to the input data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input DataFrame to be cleaned and transformed.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input DataFrame to be cleaned and transformed.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em>) – The target data.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The cleaned and transformed DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.redundancy_filtering">
+<span id="auto-prep-preprocessing-redundancy-filtering-module"></span><h2>auto_prep.preprocessing.redundancy_filtering module<a class="headerlink" href="#module-auto_prep.preprocessing.redundancy_filtering" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.redundancy_filtering.UniqueFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.redundancy_filtering.</span></span><span class="sig-name descname"><span class="pre">UniqueFilter</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/redundancy_filtering.html#UniqueFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Categorical" title="auto_prep.utils.abstract.Categorical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Categorical</span></code></a></p>
+<p>Transformer to remove categorical columns 100% unique values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.redundancy_filtering.UniqueFilter.dropped_columns">
+<span class="sig-name descname"><span class="pre">dropped_columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.dropped_columns" title="Link to this definition"></a></dt>
+<dd><p>List of dropped columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.redundancy_filtering.UniqueFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter" title="auto_prep.preprocessing.redundancy_filtering.UniqueFilter"><span class="pre">UniqueFilter</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/redundancy_filtering.html#UniqueFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies categorical columns with 100% unique values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter" title="auto_prep.preprocessing.redundancy_filtering.UniqueFilter">UniqueFilter</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.redundancy_filtering.UniqueFilter.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/redundancy_filtering.html#UniqueFilter.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data without dropped columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.redundancy_filtering.UniqueFilter.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/redundancy_filtering.html#UniqueFilter.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a description of the transformer in dictionary format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.redundancy_filtering.UniqueFilter.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/redundancy_filtering.html#UniqueFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.redundancy_filtering.UniqueFilter.transform" title="Link to this definition"></a></dt>
+<dd><p>Drops the identified categorical columns with 100% unique values based on the fit method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data without dropped columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.scaling">
+<span id="auto-prep-preprocessing-scaling-module"></span><h2>auto_prep.preprocessing.scaling module<a class="headerlink" href="#module-auto_prep.preprocessing.scaling" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.scaling.</span></span><span class="sig-name descname"><span class="pre">ColumnScaler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standard'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/scaling.html#ColumnScaler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
+<p>Scaler for all numerical features. This class applies scaling technique based on users choice to
+all numerical features.</p>
+<p>Available scaling methods: MinMaxScaler, StandardScaler, RobustScaler from sklearn.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler.scaler">
+<span class="sig-name descname"><span class="pre">scaler</span></span><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler.scaler" title="Link to this definition"></a></dt>
+<dd><p>fitted scaler instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler.PARAMS_GRID">
+<span class="sig-name descname"><span class="pre">PARAMS_GRID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'method':</span> <span class="pre">['standard',</span> <span class="pre">'minmax',</span> <span class="pre">'robust']}</span></em><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler.PARAMS_GRID" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.scaling.ColumnScaler" title="auto_prep.preprocessing.scaling.ColumnScaler"><span class="pre">ColumnScaler</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/scaling.html#ColumnScaler.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler.fit" title="Link to this definition"></a></dt>
+<dd><p>Fits the chosen scaler to the numerical features in the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data to fit the scaler to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted scaler instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#auto_prep.preprocessing.scaling.ColumnScaler" title="auto_prep.preprocessing.scaling.ColumnScaler">ColumnScaler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/scaling.html#ColumnScaler.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the feature data using the chosen scaler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data to transform.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable (to append to the result).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed feature data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler.is_numerical">
+<span class="sig-name descname"><span class="pre">is_numerical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/scaling.html#ColumnScaler.is_numerical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler.is_numerical" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/scaling.html#ColumnScaler.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler.to_tex" title="Link to this definition"></a></dt>
+<dd><p>This method returns a short description of the Scaler that was used in a form of dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.scaling.ColumnScaler.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/scaling.html#ColumnScaler.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.scaling.ColumnScaler.transform" title="Link to this definition"></a></dt>
+<dd><p>Transforms numeric feature data using the fitted scaler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data to transform.</p></li>
+<li><p><strong>y</strong> (<em>pd.Series</em><em>, </em><em>optional</em>) – The target variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed feature data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.utils">
+<span id="auto-prep-preprocessing-utils-module"></span><h2>auto_prep.preprocessing.utils module<a class="headerlink" href="#module-auto_prep.preprocessing.utils" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.utils.TolerantLabelEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.utils.</span></span><span class="sig-name descname"><span class="pre">TolerantLabelEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ignore_unknown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_original_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'unknown'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_encoded_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/utils.html#TolerantLabelEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.utils.TolerantLabelEncoder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LabelEncoder</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.utils.TolerantLabelEncoder.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/utils.html#TolerantLabelEncoder.inverse_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.utils.TolerantLabelEncoder.inverse_transform" title="Link to this definition"></a></dt>
+<dd><p>Transform labels back to original encoding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>y</strong> – Original encoding.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.utils.TolerantLabelEncoder.set_transform_request">
+<span class="sig-name descname"><span class="pre">set_transform_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'$UNCHANGED$'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.utils.TolerantLabelEncoder" title="auto_prep.preprocessing.utils.TolerantLabelEncoder"><span class="pre">TolerantLabelEncoder</span></a></span></span><a class="headerlink" href="#auto_prep.preprocessing.utils.TolerantLabelEncoder.set_transform_request" title="Link to this definition"></a></dt>
+<dd><p>Request metadata passed to the <code class="docutils literal notranslate"><span class="pre">transform</span></code> method.</p>
+<p>Note that this method is only relevant if
+<code class="docutils literal notranslate"><span class="pre">enable_metadata_routing=True</span></code> (see <code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.set_config()</span></code>).
+Please see <span class="xref std std-ref">User Guide</span> on how the routing
+mechanism works.</p>
+<p>The options for each parameter are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: metadata is requested, and passed to <code class="docutils literal notranslate"><span class="pre">transform</span></code> if provided. The request is ignored if metadata is not provided.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code>: metadata is not requested and the meta-estimator will not pass it to <code class="docutils literal notranslate"><span class="pre">transform</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code>: metadata is not requested, and the meta-estimator will raise an error if the user provides it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str</span></code>: metadata should be passed to the meta-estimator with this given alias instead of the original name.</p></li>
+</ul>
+<p>The default (<code class="docutils literal notranslate"><span class="pre">sklearn.utils.metadata_routing.UNCHANGED</span></code>) retains the
+existing request. This allows you to change the request for some
+parameters and not others.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.3.</span></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is only relevant if this estimator is used as a
+sub-estimator of a meta-estimator, e.g. used inside a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code>. Otherwise it has no effect.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>column</strong> (<em>str</em><em>, </em><em>True</em><em>, </em><em>False</em><em>, or </em><em>None</em><em>,                     </em><em>default=sklearn.utils.metadata_routing.UNCHANGED</em>) – Metadata routing for <code class="docutils literal notranslate"><span class="pre">column</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">transform</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – The updated object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.utils.TolerantLabelEncoder.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/auto_prep/preprocessing/utils.html#TolerantLabelEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.utils.TolerantLabelEncoder.transform" title="Link to this definition"></a></dt>
+<dd><p>Transform labels to normalized encoding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>y</strong> – Labels as normalized encodings.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array-like of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-auto_prep.preprocessing.variance_filtering">
+<span id="auto-prep-preprocessing-variance-filtering-module"></span><h2>auto_prep.preprocessing.variance_filtering module<a class="headerlink" href="#module-auto_prep.preprocessing.variance_filtering" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.variance_filtering.VarianceFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">auto_prep.preprocessing.variance_filtering.</span></span><span class="sig-name descname"><span class="pre">VarianceFilter</span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/variance_filtering.html#VarianceFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.variance_filtering.VarianceFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.RequiredStep" title="auto_prep.utils.abstract.RequiredStep"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequiredStep</span></code></a>, <a class="reference internal" href="auto_prep.utils.html#auto_prep.utils.abstract.Numerical" title="auto_prep.utils.abstract.Numerical"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical</span></code></a></p>
+<p>Transformer to remove numerical columns with zero variance.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.variance_filtering.VarianceFilter.dropped_columns">
+<span class="sig-name descname"><span class="pre">dropped_columns</span></span><a class="headerlink" href="#auto_prep.preprocessing.variance_filtering.VarianceFilter.dropped_columns" title="Link to this definition"></a></dt>
+<dd><p>List of dropped columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.variance_filtering.VarianceFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#auto_prep.preprocessing.variance_filtering.VarianceFilter" title="auto_prep.preprocessing.variance_filtering.VarianceFilter"><span class="pre">VarianceFilter</span></a></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/variance_filtering.html#VarianceFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.variance_filtering.VarianceFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Identifies columns with zero variances and adds to dropped_columns list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The input feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>VarianceAndUniqueFilter</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.variance_filtering.VarianceFilter.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/variance_filtering.html#VarianceFilter.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.variance_filtering.VarianceFilter.fit_transform" title="Link to this definition"></a></dt>
+<dd><p>Fits and transforms the data in one step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data without dropped columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.variance_filtering.VarianceFilter.to_tex">
+<span class="sig-name descname"><span class="pre">to_tex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/variance_filtering.html#VarianceFilter.to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.variance_filtering.VarianceFilter.to_tex" title="Link to this definition"></a></dt>
+<dd><p>Returns a description of the transformer in dictionary format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="auto_prep.preprocessing.variance_filtering.VarianceFilter.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/auto_prep/preprocessing/variance_filtering.html#VarianceFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#auto_prep.preprocessing.variance_filtering.VarianceFilter.transform" title="Link to this definition"></a></dt>
+<dd><p>Drops the identified columns with zero variance based on the fit method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pd.DataFrame</em>) – The feature data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data without dropped columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>

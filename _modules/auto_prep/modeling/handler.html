@@ -1,0 +1,697 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>auto_prep.modeling.handler &mdash; AutoPrep  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            AutoPrep
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">auto_prep</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">AutoPrep</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">auto_prep.modeling.handler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for auto_prep.modeling.handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">humanize</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.calibration</span><span class="w"> </span><span class="kn">import</span> <span class="n">LabelEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomizedSearchCV</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.abstract</span><span class="w"> </span><span class="kn">import</span> <span class="n">Classifier</span><span class="p">,</span> <span class="n">ModulesHandler</span><span class="p">,</span> <span class="n">Regressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.other</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_scoring</span><span class="p">,</span> <span class="n">save_chart</span><span class="p">,</span> <span class="n">save_json</span><span class="p">,</span> <span class="n">save_model</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">format_shape</span><span class="p">:</span> <span class="nb">callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> samples, </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> features&quot;</span>
+
+
+<div class="viewcode-block" id="custom_sort">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.custom_sort">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">custom_sort</span><span class="p">(</span><span class="n">key_value</span><span class="p">):</span>
+    <span class="n">key</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">key_value</span>
+    <span class="n">key_lower</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c1"># Check if key ends with &quot;time&quot;</span>
+    <span class="k">if</span> <span class="n">key_lower</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>  <span class="c1"># Time keys come last</span>
+    <span class="c1"># Check if key contains &quot;score&quot;</span>
+    <span class="k">elif</span> <span class="s2">&quot;score&quot;</span> <span class="ow">in</span> <span class="n">key_lower</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>  <span class="c1"># Score keys come after regular keys</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ModelHandler">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class responsible for loading and handling machine learning models and pipelines.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_task</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_meta</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_meta</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unique_models_params_checked</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_direction</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models_classes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseEstimator</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseEstimator</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipelines_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stats</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_best_models_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="ModelHandler.run">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">X_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">X_test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs models fitting and selection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X_train (pd.DataFrame): Training feature dataset.</span>
+<span class="sd">            y_train (pd.Series): Training target dataset.</span>
+<span class="sd">            X_valid (pd.DataFrame): Validation feature dataset.</span>
+<span class="sd">            y_valid (pd.Series): Validation target dataset.</span>
+<span class="sd">            X_test (pd.DataFrame): Test feature dataset.</span>
+<span class="sd">            y_test (pd.Series): Test target dataset.</span>
+<span class="sd">            task (str): regiression / classification</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_task</span> <span class="o">=</span> <span class="n">task</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_meta</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">format_shape</span><span class="p">(</span><span class="n">X_train</span><span class="p">),</span>
+            <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">format_shape</span><span class="p">(</span><span class="n">X_valid</span><span class="p">),</span>
+            <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">format_shape</span><span class="p">(</span><span class="n">X_test</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models_classes</span> <span class="o">=</span> <span class="n">ModelHandler</span><span class="o">.</span><span class="n">load_models</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="n">pipelines</span><span class="p">,</span> <span class="n">pipelines_file_names</span> <span class="o">=</span> <span class="n">ModelHandler</span><span class="o">.</span><span class="n">load_pipelines</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_direction</span> <span class="o">=</span> <span class="n">get_scoring</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Tuning models...&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Will train </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_models_classes</span><span class="p">)</span><span class="si">}</span><span class="s2"> for each of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pipelines</span><span class="p">)</span><span class="si">}</span><span class="s2"> preprocessing pipelines.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">pipeline_file_name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+            <span class="nb">zip</span><span class="p">(</span><span class="n">pipelines</span><span class="p">,</span> <span class="n">pipelines_file_names</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">X_train_cur</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+                <span class="n">X_valid_cur</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Faulty preprocessing pipeline </span><span class="si">{</span><span class="n">pipeline_file_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+            <span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models_classes</span>
+            <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">&gt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+                <span class="n">gen</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
+                    <span class="n">gen</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Tuning models for pipeline number </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;model&quot;</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">model_cls</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">n_runs</span> <span class="o">=</span> <span class="n">ModelHandler</span><span class="o">.</span><span class="n">tune_model</span><span class="p">(</span>
+                        <span class="n">scoring_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">,</span>
+                        <span class="n">model_cls</span><span class="o">=</span><span class="n">model_cls</span><span class="p">,</span>
+                        <span class="n">best_k</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">max_models</span><span class="p">,</span>
+                        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train_cur</span><span class="p">,</span>
+                        <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+                        <span class="n">X_valid</span><span class="o">=</span><span class="n">X_valid_cur</span><span class="p">,</span>
+                        <span class="n">y_valid</span><span class="o">=</span><span class="n">y_valid</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to tune </span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+                <span class="n">info</span><span class="p">[</span><span class="s2">&quot;Preprocessing pipeline name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pipeline_file_name</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Preprocessing pipeline name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pipeline_file_name</span>
+                    <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Preprocessing pipeline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pipeline</span>
+                    <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Model cls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_cls</span>
+                    <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Model cls base name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_stats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_model_meta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">model_cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                            <span class="s2">&quot;unique params distributions checked&quot;</span><span class="p">:</span> <span class="n">n_runs</span><span class="p">,</span>
+                            <span class="s2">&quot;param_grid&quot;</span><span class="p">:</span> <span class="n">model_cls</span><span class="o">.</span><span class="n">PARAM_GRID</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_unique_models_params_checked</span> <span class="o">+=</span> <span class="n">n_runs</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+
+        <span class="n">direction</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_direction</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_results</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">direction</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;mean_test_score&quot;</span><span class="p">],</span>
+                <span class="n">direction</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;std_test_score&quot;</span><span class="p">],</span>
+                <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;std_fit_time&quot;</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Re-training best models...&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Re-training for up to </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">max_models</span><span class="si">}</span><span class="s2"> best models.&quot;</span><span class="p">)</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">[:</span> <span class="n">config</span><span class="o">.</span><span class="n">max_models</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">&gt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Re-training best models...&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gen</span><span class="p">):</span>
+            <span class="n">model_cls</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Model cls&quot;</span><span class="p">)</span>
+            <span class="n">pipeline</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Preprocessing pipeline&quot;</span><span class="p">)</span>
+            <span class="n">pipeline_file_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Preprocessing pipeline name&quot;</span><span class="p">)</span>
+
+            <span class="n">X_train_cur</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="n">X_valid_cur</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
+            <span class="n">X_test_cur</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">model_cls</span><span class="p">(</span><span class="o">**</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">])</span>
+
+            <span class="n">X_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X_train_cur</span><span class="p">,</span> <span class="n">X_valid_cur</span><span class="p">])</span>
+            <span class="n">y_combined</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_categorical_dtype</span><span class="p">(</span><span class="n">y_combined</span><span class="p">):</span>
+                <span class="n">label_encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+                <span class="n">label_encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_combined</span><span class="p">)</span>
+                <span class="n">y_combined</span> <span class="o">=</span> <span class="n">label_encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y_combined</span><span class="p">)</span>
+
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_combined</span><span class="p">,</span> <span class="n">y_combined</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;re-training time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+            <span class="n">y_combined_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_combined</span><span class="p">)</span>
+            <span class="n">y_test_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_cur</span><span class="p">)</span>
+
+            <span class="n">combined_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">(</span><span class="n">y_combined</span><span class="p">,</span> <span class="n">y_combined_pred</span><span class="p">)</span>
+            <span class="n">test_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_test_pred</span><span class="p">)</span>
+
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_cls</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">])</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;combined score (after re-training)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_score</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;test score (after re-training)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_score</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;model base name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span>
+
+            <span class="n">final_pipeline_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;final_pipeline_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.joblib&quot;</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;final pipeline name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_pipeline_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_best_models_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+            <span class="n">final_model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([(</span><span class="s2">&quot;preprocessing&quot;</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;predicting&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)])</span>
+            <span class="n">save_model</span><span class="p">(</span><span class="n">final_pipeline_name</span><span class="p">,</span> <span class="n">final_model</span><span class="p">)</span>
+
+        <span class="n">best_model_result</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_best_models_results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;test score (after re-training)&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">ModelHandler</span><span class="o">.</span><span class="n">generate_shap</span><span class="p">(</span><span class="n">X_test_cur</span><span class="p">,</span> <span class="n">best_model_result</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModelHandler.write_to_raport">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.write_to_raport">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_to_raport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raport</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes overview section to a raport&quot;&quot;&quot;</span>
+
+        <span class="n">modeling_section</span> <span class="o">=</span> <span class="n">raport</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;Modeling&quot;</span><span class="p">)</span>  <span class="c1"># noqa: F841</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">:</span>
+            <span class="c1"># remove non-serializable fields</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Preprocessing pipeline&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Model cls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_subsection</span><span class="p">(</span><span class="s2">&quot;Overview&quot;</span><span class="p">)</span>
+        <span class="n">overview</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task</span><span class="p">,</span>
+            <span class="s2">&quot;unique models param sets checked (for each dataset)&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique_models_params_checked</span><span class="p">,</span>
+            <span class="s2">&quot;unique models&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_models_classes</span><span class="p">),</span>
+            <span class="s2">&quot;base model names&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">model_cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">model_cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models_classes</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;scoring function&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scoring_func</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;scoring direction&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoring_direction</span><span class="p">,</span>
+            <span class="s2">&quot;search parameters&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">tuning_params</span><span class="p">),</span>
+            <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">,</span>
+            <span class="s2">&quot;best models results&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_best_models_results</span><span class="p">,</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_meta</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">save_json</span><span class="p">(</span><span class="s2">&quot;modeling_scores.json&quot;</span><span class="p">,</span> <span class="n">overview</span><span class="p">)</span>
+
+        <span class="n">section_desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;This part of the report presents the results of the modeling process. There were </span><span class="si">{</span><span class="n">overview</span><span class="p">[</span><span class="s1">&#39;unique models&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">overview</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> models trained for each of the best preprocessing pipelines. </span><span class="se">\\</span><span class="s2">newline&quot;</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">section_desc</span><span class="p">)</span>
+        <span class="n">used_models_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The following models were used in the modeling process. </span><span class="se">\\</span><span class="s2">newline&quot;</span>
+        <span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">used_models_desc</span><span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_list</span><span class="p">(</span><span class="n">overview</span><span class="p">[</span><span class="s2">&quot;base model names&quot;</span><span class="p">])</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_subsection</span><span class="p">(</span><span class="s2">&quot;Hyperparameter tuning&quot;</span><span class="p">)</span>
+        <span class="n">section_desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;This section presents the results of hyperparameter tuning for each of the best </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">max_models</span><span class="si">}</span><span class="s2"> models using RandomizedSearchCV. Param grids used for each model are presented in the tables below. &quot;</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">section_desc</span><span class="p">)</span>
+
+        <span class="n">model_meta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_meta</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">param_grid</span> <span class="ow">in</span> <span class="n">model_meta</span><span class="p">[[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;param_grid&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="n">model_base_name</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_grid</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                    <span class="n">param_grid</span><span class="p">,</span>
+                    <span class="n">caption</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Param grid for model </span><span class="si">{</span><span class="n">model_base_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+                    <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">param_grid</span><span class="p">)},</span>
+                    <span class="n">caption</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Param grid for model </span><span class="si">{</span><span class="n">model_base_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">best_results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">overview</span><span class="p">[</span><span class="s2">&quot;best models results&quot;</span><span class="p">])</span>
+        <span class="n">best_results</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">best_results</span><span class="p">[</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;Model cls base name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;final pipeline name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;params&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;mean_fit_time&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test score (after re-training)&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">]</span>
+            <span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;Model cls base name&quot;</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;final pipeline name&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipeline&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Best params&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;mean_fit_time&quot;</span><span class="p">:</span> <span class="s2">&quot;Mean fit time&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;test score (after re-training)&quot;</span><span class="p">:</span> <span class="s2">&quot;Test score&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Test score&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">overview</span><span class="p">[</span><span class="s2">&quot;task&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">best_results</span><span class="p">[</span><span class="s2">&quot;Mean fit time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">best_results</span><span class="p">[</span><span class="s2">&quot;Mean fit time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">humanize</span><span class="o">.</span><span class="n">naturaldelta</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">best_results_dict</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">best_results</span><span class="o">.</span><span class="n">itertuples</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_reference</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:best_models_results&quot;</span><span class="p">,</span> <span class="n">add_space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">best_models_desc</span> <span class="o">=</span> <span class="s2">&quot;presents the best models and pipelines along with their hyperparameters, mean fit time, and test score.&quot;</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">best_models_desc</span><span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span>
+            <span class="n">best_results_dict</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Best models results&quot;</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="s2">&quot;Pipeline&quot;</span><span class="p">,</span> <span class="s2">&quot;Best params&quot;</span><span class="p">,</span> <span class="s2">&quot;Mean fit time&quot;</span><span class="p">,</span> <span class="s2">&quot;Test score&quot;</span><span class="p">],</span>
+            <span class="n">widths</span><span class="o">=</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tab:best_models_results&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_subsection</span><span class="p">(</span><span class="s2">&quot;Interpretability&quot;</span><span class="p">)</span>
+        <span class="n">interpretability_desc</span> <span class="o">=</span> <span class="s2">&quot;This section presents SHAP plots for the best model.&quot;</span>
+        <span class="n">charts_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">charts_dir</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">interpretability_desc</span><span class="p">)</span>
+
+        <span class="n">shap_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;shap_bar&quot;</span><span class="p">,</span> <span class="s2">&quot;shap_summ&quot;</span><span class="p">,</span> <span class="s2">&quot;shap_wat&quot;</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Adding SHAP plots to raport...&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">shap_order</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">charts_dir</span><span class="p">,</span> <span class="s2">&quot;shap*.png&quot;</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">overview</span><span class="p">[</span><span class="s2">&quot;task&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                            <span class="n">class_no</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;shap_summ&quot;</span><span class="p">:</span>
+                                <span class="n">caption</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SHAP summary plot for class </span><span class="si">{</span><span class="n">class_no</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="k">elif</span> <span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;shap_wat&quot;</span><span class="p">:</span>
+                                <span class="n">caption</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SHAP waterfall plot for class </span><span class="si">{</span><span class="n">class_no</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">caption</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SHAP bar plot for class </span><span class="si">{</span><span class="n">class_no</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;shap_summ&quot;</span><span class="p">:</span>
+                                <span class="n">caption</span> <span class="o">=</span> <span class="s2">&quot;SHAP summary plot.&quot;</span>
+                            <span class="k">elif</span> <span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;shap_wat&quot;</span><span class="p">:</span>
+                                <span class="n">caption</span> <span class="o">=</span> <span class="s2">&quot;SHAP waterfall plot.&quot;</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">caption</span> <span class="o">=</span> <span class="s2">&quot;SHAP bar plot.&quot;</span>
+                        <span class="n">raport</span><span class="o">.</span><span class="n">add_figure</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in adding SHAP plots to raport: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">raport</span></div>
+
+
+<div class="viewcode-block" id="ModelHandler.load_models">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.load_models">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_models</span><span class="p">(</span><span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseEstimator</span><span class="p">]:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Loading models...&quot;</span><span class="p">)</span>
+        <span class="n">package</span> <span class="o">=</span> <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">get_subpackage</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="n">ModelHandler</span><span class="o">.</span><span class="n">load_modules</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+        <span class="n">classes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+            <span class="n">classes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="n">ModulesHandler</span><span class="o">.</span><span class="n">load_classes</span><span class="p">(</span><span class="n">module_name</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">package</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">models_classes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">classes</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;regression&quot;</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Regressor</span><span class="p">):</span>
+                <span class="n">models_classes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">Classifier</span><span class="p">):</span>
+                <span class="n">models_classes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="n">models_classes</span><span class="si">}</span><span class="s2"> models.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">models_classes</span></div>
+
+
+<div class="viewcode-block" id="ModelHandler.load_modules">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.load_modules">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_modules</span><span class="p">(</span><span class="n">package</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads modules from the specified package that contains models</span>
+<span class="sd">        (start with model_).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            package (str): The package to load modules from.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: found module names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">package</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;model_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">):</span>
+                <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found model modules: </span><span class="si">{</span><span class="n">modules</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">modules</span></div>
+
+
+<div class="viewcode-block" id="ModelHandler.load_pipelines">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.load_pipelines">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_pipelines</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">BaseEstimator</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads pipelines from the directory specified in config.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[BaseEstimator]: loaded pipelines.</span>
+<span class="sd">            List[str]: pipelines file names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Loading pipelines...&quot;</span><span class="p">)</span>
+
+        <span class="n">pipelines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">file_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">pipelines_dir</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.joblib&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">file_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;preprocessing_&quot;</span><span class="p">):</span>
+                <span class="n">file_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+        <span class="n">file_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">file_names</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">file_names</span><span class="p">:</span>
+                <span class="n">pipeline</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">pipelines_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">))</span>
+                <span class="n">pipelines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pipelines</span><span class="p">,</span> <span class="n">file_names</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in loading pipelines: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ModelHandler.tune_model">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.tune_model">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tune_model</span><span class="p">(</span>
+        <span class="n">scoring_func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+        <span class="n">model_cls</span><span class="p">:</span> <span class="n">BaseEstimator</span><span class="p">,</span>
+        <span class="n">best_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">y_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">X_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">y_valid</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tunes a model&#39;s hyperparameters using RandomizedSearchCV and returns the best model and related information.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            scoring_func (Callable): Scoring function for evaluating models.</span>
+<span class="sd">            model_cls (BaseEstimator): Model class to be trained.</span>
+<span class="sd">            best_k (int): Return up to k best models params.</span>
+<span class="sd">            X_train (pd.DataFrame): Training feature dataset.</span>
+<span class="sd">            y_train (pd.Series): Training target dataset.</span>
+<span class="sd">            X_valid (pd.DataFrame, optional): Validation feature dataset. Defaults to None.</span>
+<span class="sd">            y_valid (pd.Series, optional): Validation target dataset. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: training meta info</span>
+<span class="sd">            List[dict]: results</span>
+<span class="sd">            int: models tested</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_cls</span><span class="p">,</span> <span class="s2">&quot;PARAM_GRID&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Model class must define a PARAM_GRID attribute.&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tuning model </span><span class="si">{</span><span class="n">model_cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">random_search</span> <span class="o">=</span> <span class="n">RandomizedSearchCV</span><span class="p">(</span>
+            <span class="n">estimator</span><span class="o">=</span><span class="n">model_cls</span><span class="p">(),</span>
+            <span class="n">param_distributions</span><span class="o">=</span><span class="n">model_cls</span><span class="o">.</span><span class="n">PARAM_GRID</span><span class="p">,</span>
+            <span class="n">scoring</span><span class="o">=</span><span class="n">scoring_func</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">config</span><span class="o">.</span><span class="n">tuning_params</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="c1"># Fit with or without validation set</span>
+        <span class="n">fit_params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">X_valid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y_valid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_cls</span><span class="p">,</span> <span class="s2">&quot;eval_set&quot;</span><span class="p">):</span>
+                <span class="n">fit_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;eval_set&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">X_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)],</span>
+                        <span class="s2">&quot;eval_metric&quot;</span><span class="p">:</span> <span class="n">scoring_func</span><span class="p">,</span>
+                        <span class="s2">&quot;early_stopping_rounds&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+        <span class="n">random_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;search_time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">,</span>
+            <span class="s2">&quot;best_score&quot;</span><span class="p">:</span> <span class="n">random_search</span><span class="o">.</span><span class="n">best_score_</span><span class="p">,</span>
+            <span class="s2">&quot;best_index&quot;</span><span class="p">:</span> <span class="n">random_search</span><span class="o">.</span><span class="n">best_index_</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">random_search</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span>
+        <span class="n">sorted_results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;mean_test_score&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">top_models_stats</span> <span class="o">=</span> <span class="n">sorted_results</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">best_k</span><span class="p">)[</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;params&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mean_test_score&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;std_test_score&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mean_fit_time&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;std_fit_time&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span><span class="p">,</span> <span class="n">top_models_stats</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelHandler.generate_shap">
+<a class="viewcode-back" href="../../../auto_prep.modeling.html#auto_prep.modeling.handler.ModelHandler.generate_shap">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_shap</span><span class="p">(</span>
+        <span class="n">X_test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">model_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates SHAP plots for a given model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            X_test (pd.DataFrame): Test data for SHAP analysis.</span>
+<span class="sd">            model (BaseEstimator): Trained model for generating SHAP values.</span>
+<span class="sd">            model_idx (int): Identifier for the model.</span>
+<span class="sd">            task (str): regiression / classification</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">create_explainer</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">:</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">background_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">shap</span><span class="o">.</span><span class="n">Explainer</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Creates a SHAP explainer based on the model&#39;s prediction method.&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">shap</span><span class="o">.</span><span class="n">Explainer</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">,</span> <span class="n">background_data</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;predict&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">shap</span><span class="o">.</span><span class="n">Explainer</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">,</span> <span class="n">background_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Model must implement &#39;predict_proba&#39; or &#39;predict&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">log_and_plot_shap</span><span class="p">(</span>
+            <span class="n">shap_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">shap</span><span class="o">.</span><span class="n">Explanation</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+            <span class="n">sample_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">plot_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">class_idx</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Logs information and generates SHAP plots.&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;class_</span><span class="si">{</span><span class="n">class_idx</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">class_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;classification&quot;</span>
+                <span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating plots for class </span><span class="si">{</span><span class="n">class_idx</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+                <span class="n">shap</span><span class="o">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">class_idx</span><span class="p">],</span> <span class="n">X_sample</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">save_chart</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;shap_summary_</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+                <span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span>
+                    <span class="n">shap_values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">class_idx</span><span class="p">][</span><span class="n">sample_idx</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+                <span class="n">save_chart</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;shap_waterfall_</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+                <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">class_idx</span><span class="p">],</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">save_chart</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;shap_bar_</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># Regression</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Generating regression SHAP plots...&quot;</span><span class="p">)</span>
+                <span class="n">shap</span><span class="o">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">X_sample</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">save_chart</span><span class="p">(</span><span class="s2">&quot;shap_summary_regression.png&quot;</span><span class="p">)</span>
+                <span class="n">shap</span><span class="o">.</span><span class="n">waterfall_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="n">sample_idx</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">save_chart</span><span class="p">(</span><span class="s2">&quot;shap_waterfall_regression.png&quot;</span><span class="p">)</span>
+                <span class="n">shap</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">max_display</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">save_chart</span><span class="p">(</span><span class="s2">&quot;shap_bar_regression.png&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;SHAP&quot;</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sampling data for SHAP analysis...&quot;</span><span class="p">)</span>
+            <span class="n">background</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">)))</span>
+            <span class="n">sample_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+            <span class="n">X_sample</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Sample size: </span><span class="si">{</span><span class="n">sample_size</span><span class="si">}</span><span class="s2">, columns: </span><span class="si">{</span><span class="n">X_sample</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">explainer</span> <span class="o">=</span> <span class="n">create_explainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">background</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SHAP explainer created successfully.&quot;</span><span class="p">)</span>
+            <span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer</span><span class="p">(</span><span class="n">X_sample</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+
+            <span class="n">sample_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X_sample</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="n">num_classes</span> <span class="o">=</span> <span class="n">shap_values</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">class_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_classes</span><span class="p">):</span>
+                    <span class="n">log_and_plot_shap</span><span class="p">(</span>
+                        <span class="n">shap_values</span><span class="p">,</span> <span class="n">sample_idx</span><span class="p">,</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="n">class_idx</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log_and_plot_shap</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">sample_idx</span><span class="p">,</span> <span class="s2">&quot;regression&quot;</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SHAP plots generated for model: </span><span class="si">{</span><span class="n">model_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to generate SHAP plots: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Paweł Pozorski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

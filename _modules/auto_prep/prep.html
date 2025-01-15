@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>auto_prep.prep &mdash; AutoPrep  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AutoPrep
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">auto_prep</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AutoPrep</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">auto_prep.prep</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for auto_prep.prep</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.modeling.handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.preprocessing.handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">PreprocessingHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.raporting.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">EdaRaport</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.raporting.overview</span><span class="w"> </span><span class="kn">import</span> <span class="n">OverviewRaport</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.raporting.raport</span><span class="w"> </span><span class="kn">import</span> <span class="n">Raport</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils.logging_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">format_column_name</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;__&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AutoPrep">
+<a class="viewcode-back" href="../../auto_prep.html#auto_prep.prep.AutoPrep">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AutoPrep</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main pipeline orchestrating the entire preprocessing process.</span>
+
+<span class="sd">    This class handles the complete workflow from data preprocessing to</span>
+<span class="sd">    report generation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overview_raport</span><span class="p">:</span> <span class="n">OverviewRaport</span> <span class="o">=</span> <span class="n">OverviewRaport</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eda_raport</span><span class="p">:</span> <span class="n">EdaRaport</span> <span class="o">=</span> <span class="n">EdaRaport</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessing_handler</span><span class="p">:</span> <span class="n">PreprocessingHandler</span> <span class="o">=</span> <span class="n">PreprocessingHandler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_handler</span><span class="p">:</span> <span class="n">ModelHandler</span> <span class="o">=</span> <span class="n">ModelHandler</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AutoPrep.run">
+<a class="viewcode-back" href="../../auto_prep.html#auto_prep.prep.AutoPrep.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the complete pipeline on the provided dataset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (pd.DataFrame): Input dataset to process.</span>
+<span class="sd">            target_column (str): Name of the target variable column.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">prepare_dir</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting pipeline run with target column: </span><span class="si">{</span><span class="n">target_column</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input data shape: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># &quot;.&quot; in names leads to os problems</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; will be renamed to </span><span class="si">{</span><span class="n">format_column_name</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;renamed due to &#39;.&#39; in it&#39;s name, which leads to os problems.&quot;</span>
+                <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;__&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target_column</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generate_report</span><span class="p">()</span>
+        <span class="n">tqdm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Report has been generated and saved in: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">root_dir</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">Charts are available in: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">root_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">raport_name</span><span class="si">}</span><span class="s2">/charts. </span><span class="se">\n</span><span class="s2">Pipelines are saved in: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">root_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">raport_name</span><span class="si">}</span><span class="s2">/pipelines&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs all neccessary computations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (pd.DataFrame): Input dataset to process.</span>
+<span class="sd">            target_column (str): Name of the target variable column.</span>
+<span class="sd">            task (str): Classification or regression. For auto will try to detect it itself.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Calculations.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">AutoPrep</span><span class="o">.</span><span class="n">_detect_task_type</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target_column</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Detected task: </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">task</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="s2">&quot;classification&quot;</span><span class="p">],</span> <span class="s2">&quot;Unknown task.&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Split data</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Spliting data.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Split features and target</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">target_column</span><span class="p">])</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">target_column</span><span class="p">]</span>
+
+            <span class="c1"># Split data</span>
+            <span class="n">X_train</span><span class="p">,</span> <span class="n">X_temp</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_temp</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+                <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">train_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">random_state</span>
+            <span class="p">)</span>
+            <span class="n">X_valid</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+                <span class="n">X_temp</span><span class="p">,</span>
+                <span class="n">y_temp</span><span class="p">,</span>
+                <span class="n">test_size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">test_size</span> <span class="o">/</span> <span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">test_size</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">valid_size</span><span class="p">),</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="p">)</span>  <span class="c1"># noqa: F841</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Overview</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">overview_raport</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Eda</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eda_raport</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Preprocessing</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preprocessing_handler</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+                <span class="n">X_valid</span><span class="o">=</span><span class="n">X_valid</span><span class="p">,</span>
+                <span class="n">y_valid</span><span class="o">=</span><span class="n">y_valid</span><span class="p">,</span>
+                <span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">,</span>
+            <span class="p">)</span>
+
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Modeling</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_handler</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+                <span class="n">X_valid</span><span class="o">=</span><span class="n">X_valid</span><span class="p">,</span>
+                <span class="n">y_valid</span><span class="o">=</span><span class="n">y_valid</span><span class="p">,</span>
+                <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
+                <span class="n">y_test</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span>
+                <span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pipeline run failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates and saves raport.&quot;&quot;&quot;</span>
+
+        <span class="n">raport</span> <span class="o">=</span> <span class="n">Raport</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">start_operation</span><span class="p">(</span><span class="s2">&quot;Generate raport.&quot;</span><span class="p">)</span>
+        <span class="n">raport</span><span class="o">.</span><span class="n">add_header</span><span class="p">()</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overview_raport</span><span class="o">.</span><span class="n">write_to_raport</span><span class="p">(</span><span class="n">raport</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Eda</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eda_raport</span><span class="o">.</span><span class="n">write_to_raport</span><span class="p">(</span><span class="n">raport</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocessing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessing_handler</span><span class="o">.</span><span class="n">write_to_raport</span><span class="p">(</span><span class="n">raport</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modeling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_handler</span><span class="o">.</span><span class="n">write_to_raport</span><span class="p">(</span><span class="n">raport</span><span class="p">)</span>
+
+        <span class="n">raport</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">end_operation</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_detect_task_type</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Automatically detects whether the target column is for regression or classification.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): The input dataset.</span>
+<span class="sd">            target_column (str): The name of the target column.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: &#39;regression&#39; or &#39;classification&#39; based on the target column.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target_column</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+            <span class="n">unique_values</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">unique_values</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">max_unique_values_classification</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;classification&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;regression&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;classification&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Paweł Pozorski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

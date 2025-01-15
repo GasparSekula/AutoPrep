@@ -4,10 +4,106 @@ auto\_prep.preprocessing package
 Submodules
 ----------
 
-auto\_prep.preprocessing.imputer module
+auto\_prep.preprocessing.abstract module
+----------------------------------------
+
+.. automodule:: auto_prep.preprocessing.abstract
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.binning module
 ---------------------------------------
 
-.. automodule:: auto_prep.preprocessing.imputer
+.. automodule:: auto_prep.preprocessing.binning
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.correlation\_filtering module
+------------------------------------------------------
+
+.. automodule:: auto_prep.preprocessing.correlation_filtering
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.dimention\_reducing module
+---------------------------------------------------
+
+.. automodule:: auto_prep.preprocessing.dimention_reducing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.encoding module
+----------------------------------------
+
+.. automodule:: auto_prep.preprocessing.encoding
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.feature\_selecting module
+--------------------------------------------------
+
+.. automodule:: auto_prep.preprocessing.feature_selecting
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.handler module
+---------------------------------------
+
+.. automodule:: auto_prep.preprocessing.handler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.imputing module
+----------------------------------------
+
+.. automodule:: auto_prep.preprocessing.imputing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.outlier\_detecting module
+--------------------------------------------------
+
+.. automodule:: auto_prep.preprocessing.outlier_detecting
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.redundancy\_filtering module
+-----------------------------------------------------
+
+.. automodule:: auto_prep.preprocessing.redundancy_filtering
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.scaling module
+---------------------------------------
+
+.. automodule:: auto_prep.preprocessing.scaling
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.utils module
+-------------------------------------
+
+.. automodule:: auto_prep.preprocessing.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+auto\_prep.preprocessing.variance\_filtering module
+---------------------------------------------------
+
+.. automodule:: auto_prep.preprocessing.variance_filtering
    :members:
    :undoc-members:
    :show-inheritance:
